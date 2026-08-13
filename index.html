@@ -3,148 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fentastic Eğitim</title>
-    <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #0284c7;
-            --accent-hover: #0369a1;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #334155;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding-bottom: 40px;
-        }
-        header {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: white;
-            text-align: center;
-            padding: 2.5rem 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        header h1 {
-            font-size: 2.2rem;
-            color: #38bdf8;
-            margin-bottom: 0.5rem;
-        }
-        header p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        .container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .welcome-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-            border-left: 5px solid var(--accent);
-        }
-        .section-title {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-3px);
-        }
-        .card h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-        .card p {
-            font-size: 0.95rem;
-            color: #64748b;
-            margin-bottom: 1.5rem;
-        }
-        .btn {
-            display: inline-block;
-            background-color: var(--accent);
-            color: white;
-            text-align: center;
-            padding: 0.75rem 1.25rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: var(--accent-hover);
-        }
-        footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-    </style>
+    <title>Fentastic Eğitim - KPSS Hazırlık Platformu</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts & FontAwesome İkonları -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <header>
-        <h1>Fentastic Eğitim</h1>
-        <p>Dijital Eğitim ve Soru Platformu</p>
+    <!-- Üst Menü / Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">Fentastic <span>Eğitim</span></div>
+            <nav class="nav-links">
+                <a href="#kpss-dersler">Dersler</a>
+                <a href="#ozellikler">Neden Biz?</a>
+                <a href="#iletisim" class="btn-nav">Giriş Yap</a>
+            </nav>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="welcome-card">
-            <h2>Hoş Geldiniz! 🚀</h2>
-            <p>Fentastic Eğitim platformu ile KPSS, Fen Bilimleri ve interaktif testlere kolayca erişebilir, kendinizi sınayabilirsiniz.</p>
-        </div>
-
-        <h2 class="section-title">Eğitim Modülleri</h2>
-
-        <div class="grid">
-            <div class="card">
-                <div>
-                    <h3>KPSS Tarih: Osmanlı Devleti</h3>
-                    <p>Medeniyetten Yıkılışa kadar 200 adet interaktif soru ve çözümleri.</p>
-                </div>
-                <button class="btn" onclick="alert('KPSS 200 Soru Modülü Çok Yakında Eklenecek!')">Testi Başlat</button>
-            </div>
-
-            <div class="card">
-                <div>
-                    <h3>Fen Bilimleri Soru Bankası</h3>
-                    <p>İnteraktif Fen Bilimleri soru setleri ve konu anlatım modülleri.</p>
-                </div>
-                <button class="btn" onclick="alert('Fen Bilimleri Modülü Çok Yakında Eklenecek!')">Modüle Git</button>
+    <!-- Hero / Karşılama Alanı -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="brand-title">Fentastic Eğitim</h1>
+            <p class="hero-slogan">Eğitimin Fentastic Hali</p>
+            <div class="hero-buttons">
+                <a href="#kpss-dersler" class="btn-primary"><i class="fa-solid fa-book-open"></i> Ders Çalışmaya Başla</a>
+                <a href="#kpss-dersler" class="btn-secondary"><i class="fa-solid fa-pen-to-square"></i> Test Çöz</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <footer>
-        &copy; 2026 Fentastic Eğitim. Tüm hakları saklıdır.
+    <!-- KPSS Ders Kartları Bölümü -->
+    <main id="kpss-dersler" class="main-container">
+        <h2 class="section-title">KPSS Ders Kategorileri</h2>
+        <p class="section-subtitle">Eksiksiz ders notları ve özgün soru çözümleriyle KPSS'ye tam hazırlık.</p>
+
+        <div class="cards-grid">
+            
+            <!-- Türkçe -->
+            <div class="course-card">
+                <div class="card-header bg-turkce">
+                    <i class="fa-solid fa-language course-icon"></i>
+                    <h3>Türkçe</h3>
+                </div>
+                <div class="card-body">
+                    <p>Paragraf, dil bilgisi ve sözel mantık konularında uzmanlaşın.</p>
+                    <div class="card-actions">
+                        <a href="#" class="sub-btn btn-note"><i class="fa-solid fa-file-lines"></i> Ders Notu</a>
+                        <a href="#" class="sub-btn btn-quiz"><i class="fa-solid fa-circle-check"></i> Soru Çözümü</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematik -->
+            <div class="course-card">
+                <div class="card-header bg-mat">
+                    <i class="fa-solid fa-calculator course-icon"></i>
+                    <h3>Matematik</h3>
+                </div>
+                <div class="card-body">
+                    <p>Temel kavramlardan sayısal mantığa adım adım net artırma teknikleri.</p>
+                    <div class="card-actions">
+                        <a href="#" class="sub-btn btn-note"><i class="fa-solid fa-file-lines"></i> Ders Notu</a>
+                        <a href="#" class="sub-btn btn-quiz"><i class="fa-solid fa-circle-check"></i> Soru Çözümü</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarih -->
+            <div class="course-card">
+                <div class="card-header bg-tarih">
+                    <i class="fa-solid fa-landmark course-icon"></i>
+                    <h3>Tarih</h3>
+                </div>
+                <div class="card-body">
+                    <p>İslamiyet öncesinden Çağdaş Türk ve Dünya Tarihi'ne kadar kronolojik notlar.</p>
+                    <div class="card-actions">
+                        <a href="#" class="sub-btn btn-note"><i class="fa-solid fa-file-lines"></i> Ders Notu</a>
+                        <a href="#" class="sub-btn btn-quiz"><i class="fa-solid fa-circle-check"></i> Soru Çözümü</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coğrafya -->
+            <div class="course-card">
+                <div class="card-header bg-cografya">
+                    <i class="fa-solid fa-earth-americas course-icon"></i>
+                    <h3>Coğrafya</h3>
+                </div>
+                <div class="card-body">
+                    <p>Türkiye'nin fiziki, beşeri ve ekonomik coğrafya haritaları ve şifreleri.</p>
+                    <div class="card-actions">
+                        <a href="#" class="sub-btn btn-note"><i class="fa-solid fa-file-lines"></i> Ders Notu</a>
+                        <a href="#" class="sub-btn btn-quiz"><i class="fa-solid fa-circle-check"></i> Soru Çözümü</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vatandaşlık -->
+            <div class="course-card">
+                <div class="card-header bg-vatandasalik">
+                    <i class="fa-solid fa-scale-balanced course-icon"></i>
+                    <h3>Vatandaşlık</h3>
+                </div>
+                <div class="card-body">
+                    <p>Anayasa hukuku, idare hukuku ve güncel bilgilerle eksiksiz hazırlık.</p>
+                    <div class="card-actions">
+                        <a href="#" class="sub-btn btn-note"><i class="fa-solid fa-file-lines"></i> Ders Notu</a>
+                        <a href="#" class="sub-btn btn-quiz"><i class="fa-solid fa-circle-check"></i> Soru Çözümü</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Öne Çıkan Özellikler Bölümü -->
+    <section id="ozellikler" class="features-section">
+        <div class="feature-item">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <h4>%100 Mobil Uyumlu</h4>
+            <p>İster otobüste ister kütüphanede, cep telefonunuzdan kesintisiz soru çözün.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <h4>Güncel Müfredat</h4>
+            <p>ÖSYM soru tiplerine uygun sürekli güncellenen ders içerikleri.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-bolt"></i>
+            <h4>Anında Geri Bildirim</h4>
+            <p>Test çözerken anında doğru cevabı ve detaylı çözümü görün.</p>
+        </div>
+    </section>
+
+    <!-- Alt Bilgi / Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 <strong>Fentastic Eğitim</strong>. Tüm Hakları Saklıdır.</p>
+            <div class="social-links">
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+        </div>
     </footer>
 
 </body>
