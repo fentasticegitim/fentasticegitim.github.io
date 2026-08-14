@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fentastic Eğitim - KPSS Tarih Testi</title>
+</head>
+<body style="background-color: #0f172a; margin: 0; padding: 15px; color: white;">
+
+    <!-- Ana Sayfaya Dönüş Butonu -->
+    <div style="max-width: 900px; margin: 10px auto;">
+        <a href="index.html" style="color: #38bdf8; text-decoration: none; font-weight: bold; font-family: sans-serif; font-size: 14px;">⬅️ Ana Sayfaya Dön</a>
+    </div>
+
+    <!-- KPSS TARİH BİLEŞENİ -->
+    <section class="fentastic-quiz-container">
+        <div class="fq-header">
+            <div class="fq-brand">
+                <span class="fq-icon">📜</span>
+                <div>
+                    <h3>KPSS Tarih & Çağdaş Dünya Soru Bankası</h3>
+                    <p>ÖSYM Mantığıyla Detaylı Çözümler ve Çeldirici Analizleri</p>
+                </div>
+            </div>
+            <div class="fq-stats">
+                <div class="fq-stat-box"><span class="fq-stat-val" id="fq-score">0</span><span class="fq-stat-lbl">Puan</span></div>
+                <div class="fq-stat-box"><span class="fq-stat-val" id="fq-streak">0 🔥</span><span class="fq-stat-lbl">Seri</span></div>
+                <div class="fq-stat-box"><span class="fq-stat-val" id="fq-accuracy">%0</span><span class="fq-stat-lbl">Başarı</span></div>
+            </div>
+        </div>
+
+        <div class="fq-tabs" id="fq-unit-tabs">
+            <button class="fq-tab-btn active" onclick="fqSelectUnit('all')">📚 Tüm Müfredat</button>
+            <button class="fq-tab-btn" onclick="fqSelectUnit('blok1')">🏹 İlk Türk Devletleri & Selçuklu</button>
+            <button class="fq-tab-btn" onclick="fqSelectUnit('blok2')">🏰 Osmanlı Dönemi</button>
+            <button class="fq-tab-btn" onclick="fqSelectUnit('cagdas')">🌍 Çağdaş Türk ve Dünya Tarihi</button>
+        </div>
+
+        <div class="fq-progress-bg"><div class="fq-progress-bar" id="fq-progress"></div></div>
+
+        <div class="fq-card">
+            <div class="fq-card-top">
+                <span class="fq-tag" id="fq-tag">Ünite</span>
+                <span class="fq-count" id="fq-count">Soru 1/10</span>
+            </div>
+
+            <div class="fq-question" id="fq-text">Soru yükleniyor...</div>
+
+            <div class="fq-options" id="fq-options"></div>
+
+            <div class="fq-explanation" id="fq-explanation" style="display:none;">
+                <div class="fq-exp-head">💡 Detaylı Çözüm ve Çeldirici Analizi</div>
+                <div id="fq-exp-content"></div>
+            </div>
+
+            <div class="fq-footer">
+                <button class="fq-btn fq-btn-sec" onclick="fqPrevQuestion()">⬅️ Önceki</button>
+                <button class="fq-btn" onclick="fqNextQuestion()">Sonraki Soru ➡️</button>
+            </div>
+        </div>
+    </section>
+
+    <style>
+    .fentastic-quiz-container {
+        width: 100%;
+        max-width: 900px;
+        margin: 10px auto;
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 20px;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, sans-serif;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        box-sizing: border-box;
+    }
+    .fq-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .fq-brand { display: flex; align-items: center; gap: 12px; }
+    .fq-icon { font-size: 28px; background: #334155; padding: 8px; border-radius: 12px; }
+    .fq-brand h3 { margin: 0; font-size: 16px; color: #818cf8; }
+    .fq-brand p { margin: 2px 0 0; font-size: 12px; color: #94a3b8; }
+    .fq-stats { display: flex; gap: 8px; }
+    .fq-stat-box { background: #0f172a; padding: 6px 10px; border-radius: 8px; border: 1px solid #334155; text-align: center; }
+    .fq-stat-val { display: block; font-weight: bold; color: #f59e0b; font-size: 14px; }
+    .fq-stat-lbl { font-size: 9px; color: #94a3b8; text-transform: uppercase; }
+    .fq-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 16px; }
+    .fq-tab-btn { background: #0f172a; border: 1px solid #334155; color: #94a3b8; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .fq-tab-btn.active { background: #4f46e5; color: #fff; border-color: #6366f1; }
+    .fq-progress-bg { background: #0f172a; height: 6px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+    .fq-progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #6366f1, #0ea5e9); transition: width 0.3s; }
+    .fq-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 16px; }
+    .fq-card-top { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 12px; }
+    .fq-tag { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.3); }
+    .fq-count { color: #94a3b8; }
+    .fq-question { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+    .fq-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .fq-opt { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+    .fq-opt-prefix { background: #0f172a; border: 1px solid #334155; min-width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+    .fq-opt.correct { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; color: #6ee7b7; }
+    .fq-opt.correct .fq-opt-prefix { background: #10b981; color: #fff; }
+    .fq-opt.incorrect { background: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; color: #fca5a5; }
+    .fq-opt.incorrect .fq-opt-prefix { background: #ef4444; color: #fff; }
+    .fq-opt.disabled { pointer-events: none; opacity: 0.8; }
+    .fq-explanation { background: #172554; border: 1px solid #3b82f6; border-radius: 10px; padding: 14px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; }
+    .fq-exp-head { font-weight: bold; color: #93c5fd; margin-bottom: 6px; }
+    .fq-footer { display: flex; justify-content: space-between; gap: 10px; }
+    .fq-btn { background: #4f46e5; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .fq-btn-sec { background: transparent; border: 1px solid #334155; color: #94a3b8; }
+    </style>
+
+    <script>
+    const fqDatabase = [
+        {
+            id: 101, unit: 'cagdas', tag: 'Çağdaş Türk & Dünya • II. Dünya Savaşı',
+            question: 'II. Dünya Savaşı yıllarında Türkiye savaşa fiilen girmemiş olsa da ekonomik ve sosyal alanda büyük tedbirler almıştır.\n\nAşağıdakilerden hangisi II. Dünya Savaşı sürecinde Türkiye\'de uygulanan ekonomik tedbir veya düzenlemelerden biri DEĞİLDİR?',
+            options: ['Milli Korunma Kanunu\'nun çıkarılması', 'Varlık Vergisi Kanunu\'nun kabul edilmesi', 'Toprak Mahsulleri Vergisi\'nin ihdas edilmesi', 'Çiftçiyi Topraklandırma Kanunu\'nun çıkarılması', 'Köy Enstitüleri\'nin kapatılması'],
+            answer: 4, explanation: '<strong>Doğru Cevap: E</strong><br>Köy Enstitüleri II. Dünya Savaşı sırasında (1940) açılmış, savaş bittikten sonra 1954 yılında kapatılmıştır.',
+            distractors: '<strong>Çeldirici Analizi:</strong> A, B, C ve D şıkları savaş ekonomisi tedbirlerindendir.'
+        },
+        {
+            id: 102, unit: 'cagdas', tag: 'Çağdaş Türk & Dünya • Soğuk Savaş Dönemi',
+            question: 'Türkiye\'nin 1952 yılında NATO\'ya resmen üye kabul edilmesinde etkili olan EN ÖNEMLİ dış politika gelişmesi aşağıdakilerden hangisidir?',
+            options: ['Balkan Paktı\'nın kurulması', 'Kore Savaşı\'na asker gönderilmesi', 'Truman Doktrini\'nin kabul edilmesi', 'Bağdat Paktı\'na üye olunması', 'Marshall Planı\'na dahil olunması'],
+            answer: 1, explanation: '<strong>Doğru Cevap: B</strong><br>Türkiye 1950\'de Kore\'ye asker göndererek 1952\'de NATO\'ya kabul edilmiştir.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Truman ve Marshall ABD mali yardım paketleridir.'
+        },
+        {
+            id: 1, unit: 'blok1', tag: 'İslamiyet Öncesi • Devlet Yapısı',
+            question: 'İlk Türk devletlerinde "Kut" anlayışının kan yoluyla hanedanın tüm erkek evlatlarına geçtiği kabul edilirdi.\n\nBu durumun yol açtığı EN TEMEL sonuç hangisidir?',
+            options: ['İpek Yolu hakimiyetinin kaybedilmesi', 'Yerleşik hayata geçişin gecikmesi', 'Taht kavgaları ve devletlerin kısa sürede yıkılması', 'Kurultay’ın dini bir meclise dönüşmesi', 'Ordu-millet anlayışının zayıflaması'],
+            answer: 2, explanation: '<strong>Doğru Cevap: C</strong><br>Veraset belirsizliği taht kavgalarına yol açmıştır.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Kurultay siyasi ve idari meclistir.'
+        }
+    ];
+
+    let fqFiltered = [], fqIndex = 0, fqCurrentUnit = 'all', fqScore = 0, fqStreak = 0, fqTotal = 0, fqCorrect = 0;
+
+    function fqInit() { fqUpdateFilter(); }
+    function fqUpdateFilter() { fqFiltered = fqDatabase.filter(q => (fqCurrentUnit === 'all') || (q.unit === fqCurrentUnit)); fqIndex = 0; fqRender(); }
+    function fqSelectUnit(unitKey) { fqCurrentUnit = unitKey; document.querySelectorAll('.fq-tab-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); fqUpdateFilter(); }
+    function fqRender() {
+        document.getElementById('fq-explanation').style.display = 'none';
+        if (fqFiltered.length === 0) { document.getElementById('fq-text').innerText = 'Soru bulunamadı.'; document.getElementById('fq-options').innerHTML = ''; return; }
+        const q = fqFiltered[fqIndex];
+        document.getElementById('fq-tag').innerText = q.tag;
+        document.getElementById('fq-count').innerText = `Soru ${fqIndex + 1} / ${fqFiltered.length}`;
+        document.getElementById('fq-text').innerHTML = q.question.replace(/\n/g, '<br>');
+        document.getElementById('fq-progress').style.width = `${((fqIndex + 1) / fqFiltered.length) * 100}%`;
+        const letters = ['A', 'B', 'C', 'D', 'E'], optsDiv = document.getElementById('fq-options');
+        optsDiv.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+            const d = document.createElement('div');
+            d.className = 'fq-opt';
+            d.onclick = () => fqSelectOpt(idx);
+            d.innerHTML = `<span class="fq-opt-prefix">${letters[idx]}</span> <span>${opt}</span>`;
+            optsDiv.appendChild(d);
+        });
+    }
+    function fqSelectOpt(idx) {
+        const q = fqFiltered[fqIndex], opts = document.getElementById('fq-options').children;
+        for (let o of opts) o.classList.add('disabled');
+        fqTotal++;
+        if (idx === q.answer) { opts[idx].classList.add('correct'); fqScore += 10; fqStreak++; fqCorrect++; }
+        else { opts[idx].classList.add('incorrect'); opts[q.answer].classList.add('correct'); fqStreak = 0; }
+        document.getElementById('fq-score').innerText = fqScore;
+        document.getElementById('fq-streak').innerText = `${fqStreak} 🔥`;
+        document.getElementById('fq-accuracy').innerText = `%${Math.round((fqCorrect / fqTotal) * 100)}`;
+        document.getElementById('fq-exp-content').innerHTML = `${q.explanation}<br><br>${q.distractors}`;
+        document.getElementById('fq-explanation').style.display = 'block';
+    }
+    function fqNextQuestion() { if (fqIndex < fqFiltered.length - 1) { fqIndex++; fqRender(); } }
+    function fqPrevQuestion() { if (fqIndex > 0) { fqIndex--; fqRender(); } }
+    
+    // Sayfa açılır açılmaz çalıştırma garantisi
+    window.onload = fqInit;
+    </script>
+</body>
+</html>
