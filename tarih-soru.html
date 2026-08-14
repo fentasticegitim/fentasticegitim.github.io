@@ -7,12 +7,10 @@
 </head>
 <body style="background-color: #0f172a; margin: 0; padding: 15px; color: white;">
 
-    <!-- Ana Sayfaya Dönüş Butonu -->
     <div style="max-width: 900px; margin: 10px auto;">
         <a href="index.html" style="color: #38bdf8; text-decoration: none; font-weight: bold; font-family: sans-serif; font-size: 14px;">⬅️ Ana Sayfaya Dön</a>
     </div>
 
-    <!-- KPSS TARİH BİLEŞENİ -->
     <section class="fentastic-quiz-container">
         <div class="fq-header">
             <div class="fq-brand">
@@ -125,6 +123,13 @@
             distractors: '<strong>Çeldirici Analizi:</strong> Truman ve Marshall ABD mali yardım paketleridir.'
         },
         {
+            id: 103, unit: 'cagdas', tag: 'Çağdaş Türk & Dünya • Yumuşama Dönemi',
+            question: '1962 yılında ABD ile SSCB\'yi nükleer savaşın eşiğine getiren "Küba Füze Krizi" sırasında SSCB, Küba\'daki füzelerini sökme şartı olarak ABD\'den Türkiye\'deki hangi füzeleri sökmesini talep etmiştir?',
+            options: ['Patriot Füzeleri', 'S-300 Füzeleri', 'Jupiter Füzeleri', 'Hawk Füzeleri', 'Tomahawk Füzeleri'],
+            answer: 2, explanation: '<strong>Doğru Cevap: C</strong><br>ABD\'nin Türkiye\'deki Jupiter füzelerini sökmesi karşılığında kriz çözülmüştür.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Patriot ve S-300 sistemleri modern dönem sistemleridir.'
+        },
+        {
             id: 1, unit: 'blok1', tag: 'İslamiyet Öncesi • Devlet Yapısı',
             question: 'İlk Türk devletlerinde "Kut" anlayışının kan yoluyla hanedanın tüm erkek evlatlarına geçtiği kabul edilirdi.\n\nBu durumun yol açtığı EN TEMEL sonuç hangisidir?',
             options: ['İpek Yolu hakimiyetinin kaybedilmesi', 'Yerleşik hayata geçişin gecikmesi', 'Taht kavgaları ve devletlerin kısa sürede yıkılması', 'Kurultay’ın dini bir meclise dönüşmesi', 'Ordu-millet anlayışının zayıflaması'],
@@ -171,7 +176,6 @@
     function fqNextQuestion() { if (fqIndex < fqFiltered.length - 1) { fqIndex++; fqRender(); } }
     function fqPrevQuestion() { if (fqIndex > 0) { fqIndex--; fqRender(); } }
     
-    // Sayfa açılır açılmaz çalıştırma garantisi
     window.onload = fqInit;
     </script>
 </body>
