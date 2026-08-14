@@ -439,8 +439,9 @@ function fqPrevQuestion() {
         fqRender();
     }
 }
+// Sayfa yüklense de yüklenmese de testi anında çalıştırır:
+setTimeout(fqInit, 200);
 
-window.addEventListener('DOMContentLoaded', fqInit);
 </script>
 
 </body>
