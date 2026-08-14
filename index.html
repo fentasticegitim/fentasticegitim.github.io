@@ -72,10 +72,10 @@
         <div class="p-5 overflow-y-auto flex-1 space-y-4">
             <!-- Türkçe -->
             <div class="space-y-1.5">
-                <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider block">🇹🇷 Türkçe</span>
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider block">🔡 Türkçe</span>
                 <div class="grid grid-cols-2 gap-2 pl-2">
                     <a href="#turkce-not" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600">📖 Ders Notu</a>
-                    <a href="#turkce-soru" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
+                    <a href="pages/soru-cozum.html?ders=turkce" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
                 </div>
             </div>
 
@@ -84,7 +84,7 @@
                 <span class="text-xs font-bold text-sky-600 uppercase tracking-wider block">📐 Matematik</span>
                 <div class="grid grid-cols-2 gap-2 pl-2">
                     <a href="#mat-not" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600">📖 Ders Notu</a>
-                    <a href="#mat-soru" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
+                    <a href="pages/soru-cozum.html?ders=matematik" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                 <span class="text-xs font-bold text-amber-600 uppercase tracking-wider block">📜 Tarih</span>
                 <div class="grid grid-cols-2 gap-2 pl-2">
                     <a href="#tarih-not" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600">📖 Ders Notu</a>
-                    <a href="pages/soru-bankasi.html" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
+                    <a href="pages/soru-cozum.html?ders=tarih" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
                 </div>
             </div>
 
@@ -102,7 +102,7 @@
                 <span class="text-xs font-bold text-teal-600 uppercase tracking-wider block">🗺️ Coğrafya</span>
                 <div class="grid grid-cols-2 gap-2 pl-2">
                     <a href="#cografya-not" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600">📖 Ders Notu</a>
-                    <a href="#cografya-soru" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
+                    <a href="pages/soru-cozum.html?ders=cografya" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
                 </div>
             </div>
 
@@ -111,14 +111,14 @@
                 <span class="text-xs font-bold text-purple-600 uppercase tracking-wider block">⚖️ Vatandaşlık</span>
                 <div class="grid grid-cols-2 gap-2 pl-2">
                     <a href="#vatandasilik-not" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600">📖 Ders Notu</a>
-                    <a href="#vatandasilik-soru" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
+                    <a href="pages/soru-cozum.html?ders=vatandaslik" onclick="toggleMenu()" class="text-xs bg-slate-100 p-2 rounded-lg font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600">📝 Soru Çözümü</a>
                 </div>
             </div>
         </div>
     </aside>
 
     <!-- 3. ANA İÇERİK ALANI -->
-    <main class="max-w-md mx-auto px-4 pt-4 space-y-5">
+    <main class="max-w-md mx-auto px-4 pt-4 space-y-5" id="dersler">
 
         <!-- Hero Karşılama Kartı -->
         <section class="bg-gradient-to-r from-emerald-600 to-sky-600 rounded-3xl p-5 text-white shadow-xl relative overflow-hidden">
@@ -161,7 +161,7 @@
                     <a href="#turkce-notlar" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-xs hover:bg-emerald-100 transition-colors">
                         <span>📖</span> Ders Notu
                     </a>
-                    <a href="#turkce-sorular" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
+                    <a href="pages/soru-cozum.html?ders=turkce" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
                         <span>📝</span> Soru Çözümü
                     </a>
                 </div>
@@ -180,7 +180,7 @@
                     <a href="#mat-notlar" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-xs hover:bg-emerald-100 transition-colors">
                         <span>📖</span> Ders Notu
                     </a>
-                    <a href="#mat-sorular" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
+                    <a href="pages/soru-cozum.html?ders=matematik" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
                         <span>📝</span> Soru Çözümü
                     </a>
                 </div>
@@ -199,8 +199,7 @@
                     <a href="#tarih-notlar" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-xs hover:bg-emerald-100 transition-colors">
                         <span>📖</span> Ders Notu
                     </a>
-                    <!-- Eski soru sayfanın bağlantısı -->
-                    <a href="pages/soru-bankasi.html" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
+                    <a href="pages/soru-cozum.html?ders=tarih" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
                         <span>📝</span> Soru Çözümü
                     </a>
                 </div>
@@ -219,7 +218,7 @@
                     <a href="#cografya-notlar" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-xs hover:bg-emerald-100 transition-colors">
                         <span>📖</span> Ders Notu
                     </a>
-                    <a href="#cografya-sorular" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
+                    <a href="pages/soru-cozum.html?ders=cografya" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
                         <span>📝</span> Soru Çözümü
                     </a>
                 </div>
@@ -238,7 +237,7 @@
                     <a href="#vatandaslik-notlar" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-xs hover:bg-emerald-100 transition-colors">
                         <span>📖</span> Ders Notu
                     </a>
-                    <a href="#vatandaslik-sorular" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
+                    <a href="pages/soru-cozum.html?ders=vatandaslik" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs hover:bg-sky-100 transition-colors">
                         <span>📝</span> Soru Çözümü
                     </a>
                 </div>
@@ -258,7 +257,7 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 <span class="text-[10px] font-medium">Dersler</span>
             </a>
-            <a href="pages/soru-bankasi.html" class="flex flex-col items-center justify-center text-slate-400 hover:text-emerald-600 w-16 h-full space-y-1">
+            <a href="pages/soru-cozum.html?ders=turkce" class="flex flex-col items-center justify-center text-slate-400 hover:text-emerald-600 w-16 h-full space-y-1">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 <span class="text-[10px] font-medium">Soru Çöz</span>
             </a>
