@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fentastic Eğitim - KPSS Tarih Testi</title>
+    <title>Fentastic Eğitim - KPSS Tarih Soru Bankası</title>
 </head>
 <body style="background-color: #0f172a; margin: 0; padding: 15px; color: white;">
 
+    <!-- Üst Gezinme / Ana Sayfaya Dönüş -->
     <div style="max-width: 900px; margin: 10px auto;">
-        <a href="index.html" style="color: #38bdf8; text-decoration: none; font-weight: bold; font-family: sans-serif; font-size: 14px;">⬅️ Ana Sayfaya Dön</a>
+        <a href="index.html" style="color: #38bdf8; text-decoration: none; font-weight: bold; font-family: system-ui, sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+            ⬅️ Ana Sayfaya Dön
+        </a>
     </div>
 
+    <!-- Test Konteyneri -->
     <section class="fentastic-quiz-container">
+        
+        <!-- Header & İstatistikler -->
         <div class="fq-header">
             <div class="fq-brand">
                 <span class="fq-icon">📜</span>
@@ -27,15 +33,18 @@
             </div>
         </div>
 
+        <!-- Ünite Filtre Sekmeleri -->
         <div class="fq-tabs" id="fq-unit-tabs">
             <button class="fq-tab-btn active" onclick="fqSelectUnit('all')">📚 Tüm Müfredat</button>
-            <button class="fq-tab-btn" onclick="fqSelectUnit('blok1')">🏹 İlk Türk Devletleri & Selçuklu</button>
+            <button class="fq-tab-btn" onclick="fqSelectUnit('blok1')">🏹 İlk Türk Dev. & Selçuklu</button>
             <button class="fq-tab-btn" onclick="fqSelectUnit('blok2')">🏰 Osmanlı Dönemi</button>
-            <button class="fq-tab-btn" onclick="fqSelectUnit('cagdas')">🌍 Çağdaş Türk ve Dünya Tarihi</button>
+            <button class="fq-tab-btn" onclick="fqSelectUnit('cagdas')">🌍 İnkılap & Çağdaş Tarih</button>
         </div>
 
+        <!-- İlerleme Çubuğu -->
         <div class="fq-progress-bg"><div class="fq-progress-bar" id="fq-progress"></div></div>
 
+        <!-- Soru Kartı -->
         <div class="fq-card">
             <div class="fq-card-top">
                 <span class="fq-tag" id="fq-tag">Ünite</span>
@@ -46,11 +55,13 @@
 
             <div class="fq-options" id="fq-options"></div>
 
+            <!-- Çözüm Açıklama Kutusu -->
             <div class="fq-explanation" id="fq-explanation" style="display:none;">
                 <div class="fq-exp-head">💡 Detaylı Çözüm ve Çeldirici Analizi</div>
                 <div id="fq-exp-content"></div>
             </div>
 
+            <!-- Alt Butonlar -->
             <div class="fq-footer">
                 <button class="fq-btn fq-btn-sec" onclick="fqPrevQuestion()">⬅️ Önceki</button>
                 <button class="fq-btn" onclick="fqNextQuestion()">Sonraki Soru ➡️</button>
@@ -58,6 +69,7 @@
         </div>
     </section>
 
+    <!-- CSS STİLLERİ -->
     <style>
     .fentastic-quiz-container {
         width: 100%;
@@ -68,8 +80,8 @@
         border-radius: 16px;
         padding: 20px;
         color: #f8fafc;
-        font-family: system-ui, -apple-system, sans-serif;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         box-sizing: border-box;
     }
     .fq-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
@@ -86,66 +98,243 @@
     .fq-tab-btn.active { background: #4f46e5; color: #fff; border-color: #6366f1; }
     .fq-progress-bg { background: #0f172a; height: 6px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
     .fq-progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #6366f1, #0ea5e9); transition: width 0.3s; }
-    .fq-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 16px; }
+    .fq-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 18px; }
     .fq-card-top { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 12px; }
     .fq-tag { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.3); }
     .fq-count { color: #94a3b8; }
-    .fq-question { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+    .fq-question { font-size: 15px; font-weight: 600; line-height: 1.6; margin-bottom: 20px; }
     .fq-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-    .fq-opt { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+    .fq-opt { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
     .fq-opt-prefix { background: #0f172a; border: 1px solid #334155; min-width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
     .fq-opt.correct { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; color: #6ee7b7; }
     .fq-opt.correct .fq-opt-prefix { background: #10b981; color: #fff; }
     .fq-opt.incorrect { background: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; color: #fca5a5; }
     .fq-opt.incorrect .fq-opt-prefix { background: #ef4444; color: #fff; }
-    .fq-opt.disabled { pointer-events: none; opacity: 0.8; }
-    .fq-explanation { background: #172554; border: 1px solid #3b82f6; border-radius: 10px; padding: 14px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; }
-    .fq-exp-head { font-weight: bold; color: #93c5fd; margin-bottom: 6px; }
+    .fq-opt.disabled { pointer-events: none; opacity: 0.85; }
+    .fq-explanation { background: #172554; border: 1px solid #3b82f6; border-radius: 10px; padding: 14px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; }
+    .fq-exp-head { font-weight: bold; color: #93c5fd; margin-bottom: 8px; border-bottom: 1px solid #1e40af; padding-bottom: 4px; }
     .fq-footer { display: flex; justify-content: space-between; gap: 10px; }
     .fq-btn { background: #4f46e5; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
     .fq-btn-sec { background: transparent; border: 1px solid #334155; color: #94a3b8; }
     </style>
 
+    <!-- JAVASCRIPT MOTORU VE ÖSYM SORU VERİTABANI -->
     <script>
     const fqDatabase = [
+        // --- 1. ÜNİTE: İSLAMİYET ÖNCESİ TÜRK TARİHİ ---
         {
-            id: 101, unit: 'cagdas', tag: 'Çağdaş Türk & Dünya • II. Dünya Savaşı',
-            question: 'II. Dünya Savaşı yıllarında Türkiye savaşa fiilen girmemiş olsa da ekonomik ve sosyal alanda büyük tedbirler almıştır.\n\nAşağıdakilerden hangisi II. Dünya Savaşı sürecinde Türkiye\'de uygulanan ekonomik tedbir veya düzenlemelerden biri DEĞİLDİR?',
-            options: ['Milli Korunma Kanunu\'nun çıkarılması', 'Varlık Vergisi Kanunu\'nun kabul edilmesi', 'Toprak Mahsulleri Vergisi\'nin ihdas edilmesi', 'Çiftçiyi Topraklandırma Kanunu\'nun çıkarılması', 'Köy Enstitüleri\'nin kapatılması'],
-            answer: 4, explanation: '<strong>Doğru Cevap: E</strong><br>Köy Enstitüleri II. Dünya Savaşı sırasında (1940) açılmış, savaş bittikten sonra 1954 yılında kapatılmıştır.',
-            distractors: '<strong>Çeldirici Analizi:</strong> A, B, C ve D şıkları savaş ekonomisi tedbirlerindendir.'
+            id: 1,
+            unit: 'blok1',
+            tag: 'İslamiyet Öncesi • Devlet Anlayışı & Kut',
+            question: 'İslamiyet öncesi Türk devletlerinde hükümdara yönetme yetkisinin Tanrı tarafından verildiğine inanılan "Kut" anlayışı mevcuttu. Bu yetki kan yoluyla hanedanın tüm erkek üyelerine geçerdi.\n\nMEB ve ÖSYM kaynakları dikkate alındığında, Kut anlayışının Türk devlet yapısında yol açtığı EN TEMEL olumsuz sonuç aşağıdakilerden hangisidir?',
+            options: [
+                'Boylar federasyonu şeklinde örgütlenilmesi',
+                'Taht kavgalarının yaşanması ve devletlerin kısa sürede yıkılması',
+                'Ordu-millet anlayışının ortadan kalkması',
+                'Kurultay kararlarının bağlayıcılığını kaybetmesi',
+                'Gök Tanrı inancının zayıflaması'
+            ],
+            answer: 1,
+            explanation: '<strong>Doğru Cevap: B</strong><br>Kut anlayışına göre "ülke hanedanın ortak malıdır" prensibi benimsenmiştir. Belirli bir veraset kuralı (örneğin sadece en büyük oğula geçiş) olmadığı için hükümdarın ölümüyle tüm erkek hanedan üyeleri tahtta hak iddia etmiş, bu durum yıkıcı taht kavgalarına neden olmuştur.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Boylar federasyonu teşkilatlanma biçimidir. Ordu-millet ve Gök Tanrı inancı Kut anlayışıyla doğrudan zayıflamaz.'
         },
         {
-            id: 102, unit: 'cagdas', tag: 'Çağdaş Türk & Dünya • Soğuk Savaş Dönemi',
-            question: 'Türkiye\'nin 1952 yılında NATO\'ya resmen üye kabul edilmesinde etkili olan EN ÖNEMLİ dış politika gelişmesi aşağıdakilerden hangisidir?',
-            options: ['Balkan Paktı\'nın kurulması', 'Kore Savaşı\'na asker gönderilmesi', 'Truman Doktrini\'nin kabul edilmesi', 'Bağdat Paktı\'na üye olunması', 'Marshall Planı\'na dahil olunması'],
-            answer: 1, explanation: '<strong>Doğru Cevap: B</strong><br>Türkiye 1950\'de Kore\'ye asker göndererek 1952\'de NATO\'ya kabul edilmiştir.',
-            distractors: '<strong>Çeldirici Analizi:</strong> Truman ve Marshall ABD mali yardım paketleridir.'
+            id: 2,
+            unit: 'blok1',
+            tag: 'İslamiyet Öncesi • Teşkilat Kavramları',
+            question: 'İslamiyet öncesi Türk devletlerindeki toplumsal ve idari yapıya ait aşağıdaki kavram-açıklama eşleştirmelerinden hangisi YANLIŞTIR?',
+            options: [
+                'Oguş - Aile',
+                'Urug - Sülale / Aileler Birliği',
+                'Boy (Bod) - Kabile',
+                'Tüz - Hükümdar ile halk arasındaki karşılıklı hak ve ödev sözleşmesi',
+                'Tudun - Dini ayinleri yöneten din adamı'
+            ],
+            answer: 4,
+            explanation: '<strong>Doğru Cevap: E</strong><br>İslamiyet öncesi Türklerde "Tudun", vergi tahsildarı ve idari vali görevini üstlenen devlet memurudur. Dini ayinleri yöneten din adamlarına ise "Kam" veya "Baksı" denirdi.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Tüz kavramı toplumsal sözleşme niteliği taşıdığı için ÖSYM tarafından kavram sorularında sıklıkla sorulmaktadır.'
+        },
+
+        // --- 2. ÜNİTE: İLK TÜRK-İSLAM DEVLETLERİ ---
+        {
+            id: 3,
+            unit: 'blok1',
+            tag: 'İlk Türk-İslam • Savaşlar ve Sonuçları',
+            question: 'Büyük Selçuklu Devleti ile Bizans İmparatorluğu arasında 1071 yılında gerçekleşen Malazgirt Meydan Muharebesi, Türk ve dünya tarihi açısından dönüm noktasıdır.\n\nAşağıdakilerden hangisi Malazgirt Savaşı\'nın sonuçlarından biri DEĞİLDİR?',
+            options: [
+                'Anadolu\'nun kapılarının Türklere kesin olarak açılması',
+                'Anadolu\'da I. Dönem Türk Beyliklerinin kurulmaya başlanması',
+                'Bizans\'ın İslam dünyası üzerindeki baskısının sona ermesi',
+                'Anadolu\'nun Türk yurdu olduğunun kesinleşerek Bizans\'ın savunmaya çekilmesi',
+                'Haçlı Seferleri’nin başlamasına zemin hazırlanması'
+            ],
+            answer: 3,
+            explanation: '<strong>Doğru Cevap: D</strong><br>Anadolu\'nun "kesin olarak Türk yurdu olduğunun tescillendiği" ve Bizans\'ın taarruzdan savunmaya geçtiği savaş 1176 Miryokefalon Savaşı\'dır. Malazgirt kapıları açmış, Miryokefalon ise tapuyu almıştır.',
+            distractors: '<strong>Çeldirici Analizi:</strong> D şıkkı klasik ÖSYM bilgi tuzağıdır; Malazgirt ile Miryokefalon sonuçları soru bankalarında sürekli çeldirici olarak yer değiştirir.'
         },
         {
-            id: 1, unit: 'blok1', tag: 'İslamiyet Öncesi • Devlet Yapısı',
-            question: 'İlk Türk devletlerinde "Kut" anlayışının kan yoluyla hanedanın tüm erkek evlatlarına geçtiği kabul edilirdi.\n\nBu durumun yol açtığı EN TEMEL sonuç hangisidir?',
-            options: ['İpek Yolu hakimiyetinin kaybedilmesi', 'Yerleşik hayata geçişin gecikmesi', 'Taht kavgaları ve devletlerin kısa sürede yıkılması', 'Kurultay’ın dini bir meclise dönüşmesi', 'Ordu-millet anlayışının zayıflaması'],
-            answer: 2, explanation: '<strong>Doğru Cevap: C</strong><br>Veraset belirsizliği taht kavgalarına yol açmıştır.',
-            distractors: '<strong>Çeldirici Analizi:</strong> Kurultay siyasi ve idari meclistir.'
+            id: 4,
+            unit: 'blok1',
+            tag: 'İlk Türk-İslam • Arazi ve Ordu Sistemleri',
+            question: 'Karahanlılar, Gazneliler ve Büyük Selçuklu Devleti\'nde uygulanan ve devletin ordu ile arazi sistemini bütünleştiren yapı aşağıdakilerden hangisidir?',
+            options: [
+                'Gulam Sistemi',
+                'İkta Sistemi',
+                'İltizam Sistemi',
+                'Devşirme Sistemi',
+                'Pençik Sistemi'
+            ],
+            answer: 1,
+            explanation: '<strong>Doğru Cevap: B</strong><br>İkta sistemi, devlete ait topraklardan elde edilen vergi gelirlerinin hizmet karşılığı asker ve memurlara verilmesidir. Bu sayede hazineden para çıkmadan savaşa hazır "İkta Askerleri" yetiştirilmiştir.',
+            distractors: '<strong>Çeldirici Analizi:</strong> İltizam Osmanlı dönemi vergi ihale usulüdür. Gulam ise insan kaynağı yetiştirme sistemidir.'
+        },
+
+        // --- 3. ÜNİTE: OSMANLI DEVLETİ KURULUŞ VE YÜKSELME ---
+        {
+            id: 5,
+            unit: 'blok2',
+            tag: 'Osmanlı Tarihi • Veraset Düzenlemeleri',
+            question: 'Osmanlı Devleti\'nde merkezi otoriteyi güçlendirmek ve taht kavgalarını önlemek amacıyla zaman içinde veraset sisteminde değişiklikler yapılmıştır.\n\nAşağıdaki padişah ve veraset düzenlemesi eşleştirmelerinden hangisi YANLIŞTIR?',
+            options: [
+                'I. Murad - "Ülke padişah ve oğullarının malıdır" anlayışının getirilmesi',
+                'Fatih Sultan Mehmed - Kanunname-i Ali Osman ile Kardeş Katli müsaadesi',
+                'I. Ahmed - "Ekber ve Erşed" (en yaşlı ve akıllı üye) sisteminin getirilmesi',
+                'II. Mehmed - Ülke hanedanın ortak malıdır anlayışının ilk kez uygulanması',
+                'I. Ahmed - Kafes Usulü ile şehzadelerin sancağa çıkmasının kaldırılması'
+            ],
+            answer: 3,
+            explanation: '<strong>Doğru Cevap: D</strong><br>"Ülke hanedanın ortak malıdır" anlayışı geleneksel Türk devlet anlayışıdır ve Osman Bey / Orhan Bey döneminde uygulanmıştır. II. Mehmed (Fatih) ise merkezi otoriteyi tek elde toplamak için veraset alanını daraltmıştır.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Veraset değişim sırası ÖSYM\'nin en sevdiği kronoloji ve mantık sorularındandır (Osman Bey ➔ I. Murad ➔ Fatih ➔ I. Ahmed).'
+        },
+        {
+            id: 6,
+            unit: 'blok2',
+            tag: 'Osmanlı Tarihi • Karadeniz Hâkimiyeti',
+            question: 'Fatih Sultan Mehmed döneminde Ege ve Karadeniz hâkimiyeti pekiştirilmiş, İpek Yolu kontrol altına alınmıştır.\n\nAşağıdaki gelişmelerden hangisi Fatih Sultan Mehmed döneminde Karadeniz\'in bir "Türk Gölü" haline gelmesinde DOĞRUDAN etkili olmuştur?',
+            options: [
+                'Kırım\'ın Fethi',
+                'Amasra\'nın Alınması',
+                'Trabzon Rum İmparatorluğu\'na Son Verilmesi',
+                'Sinop\'un Candaroğulları\'ndan Alınması',
+                'Marmara Adalarının Fethi'
+            ],
+            answer: 0,
+            explanation: '<strong>Doğru Cevap: A</strong><br>Cenevizlilerin Karadeniz\'deki kalesi konumundaki Kırım Hanlığı\'nın Gedik Ahmed Paşa komutasında Osmanlı bağlamına alınmasıyla Karadeniz tam anlamıyla bir Türk Gölü haline gelmiştir.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Amasra, Sinop ve Trabzon Karadeniz kıyısındadır ancak Karadeniz\'i Türk Gölü yapan nihai hamle Kırım\'ın fethidir.'
+        },
+
+        // --- 4. ÜNİTE: OSMANLI KÜLTÜR VE MEDENİYETİ ---
+        {
+            id: 7,
+            unit: 'blok2',
+            tag: 'Osmanlı Kültür & Medeniyet • Taşra Vergi Sistemi',
+            question: 'Osmanlı eyalet yönetiminde merkeze uzak eyaletlerde (salyaneli/yıllıklı) uygulanan, devletin nakit para ihtiyacını karşılamak için vergi gelirlerinin ihale usulüyle peşin satılması sistemine ne ad verilir?',
+            options: [
+                'Tımar Sistemi',
+                'İltizam Sistemi',
+                'Malikane Sistemi',
+                'Esham Sistemi',
+                'Müsadere Sistemi'
+            ],
+            answer: 1,
+            explanation: '<strong>Doğru Cevap: B</strong><br>İltizam, nakit ihtiyacı için vergilerin mültezimlere açık artırmayla ihale edilmesidir. Zamanla iltizamın ömür boyu verilmesine "Malikane", iç borçlanma senetlerine ise "Esham" denmiştir.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Tımar merkeze yakın (salyanesiz) eyaletlerde uygulanır. Müsadere ise haksız kazanç sağlayan memurun malına el koyma usulüdür.'
+        },
+
+        // --- 5. ÜNİTE: OSMANLI ISLAHATLARI VE ANAYASAL SÜREÇ ---
+        {
+            id: 8,
+            unit: 'blok2',
+            tag: 'Osmanlı Islahatları • Demokratikleşme Adımları',
+            question: 'Osmanlı Devleti\'nde padişahın yetkilerini İLK KEZ sınırlandıran ve demokratikleşmenin ilk adımı kabul edilen 1808 tarihli belge aşağıdakilerden hangisidir?',
+            options: [
+                'Tanzimat Fermanı',
+                'Islahat Fermanı',
+                'Sened-i İttifak',
+                'Kanun-ı Esasi',
+                'Mecelle'
+            ],
+            answer: 2,
+            explanation: '<strong>Doğru Cevap: C</strong><br>II. Mahmud ile Ayanlar arasında imzalanan Sened-i İttifak (1808), padişahın kendi gücünün yanında başka bir gücü (Ayanları) tanıdığı ve yetkilerini ilk kez sınırlandıran belgedir. İngiltere\'deki Magna Carta\'ya benzetilir.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Tanzimat (1839) kanun üstünlüğünü, Kanun-ı Esasi (1876) ise anayasal düzene geçişi ve halkın yönetime katılımını sağlar.'
+        },
+
+        // --- 6. ÜNİTE: MİLLÎ MÜCADELE VE İNKILAP TARİHİ ---
+        {
+            id: 9,
+            unit: 'cagdas',
+            tag: 'Milli Mücadele • Önemli Sözler & Strateji',
+            question: 'Mustafa Kemal Paşa\'nın Sakarya Meydan Muharebesi sırasında söylediği "Hattı müdafaa yoktur, sathı müdafaa vardır. O satıh bütün vatandır..." sözü, askeri literatürde hangi anlayışın uygulandığını gösterir?',
+            options: [
+                'Mevzi savunmasından topyekûn savunma stratejisine geçildiğini',
+                'Düzenli ordudan Kuvayımilliye birliklerine geri dönüldüğünü',
+                'Taarruz diplomasisine ağırlık verildiğini',
+                'Gerilla taktiğinin esas alındığını',
+                'Misakımillî sınırlarından taviz verildiğini'
+            ],
+            answer: 0,
+            explanation: '<strong>Doğru Cevap: A</strong><br>Bu tarihi emir, belirli bir hatta çekilip savunma yapmak yerine, vatanın her karış toprağı kanla sulanınca kadar topyekûn bir alan savunması (sathı müdafaa) yapılacağını ilan eder.',
+            distractors: '<strong>Çeldirici Analizi:</strong> ÖSYM, Mustafa Kemal\'in tarihi sözlerini (Amasya, Sivas, Sakarya, Büyük Taarruz, Çanakkale) konsept ve savaş eşleştirmesi olarak sık sık sorar.'
+        },
+
+        // --- 7. ÜNİTE: ÇAĞDAŞ TÜRK VE DÜNYA TARİHİ ---
+        {
+            id: 10,
+            unit: 'cagdas',
+            tag: 'Çağdaş Türk & Dünya • Soğuk Savaş Dönemi',
+            question: 'II. Dünya Savaşı sonrası Doğu ve Batı blokları oluşmuştur. ABD, SSCB tehdidine karşı Avrupalı devletleri ekonomik olarak desteklemek amacıyla aşağıdakilerden hangisini yürürlüğe koymuştur?',
+            options: [
+                'Truman Doktrini',
+                'Marshall Planı',
+                'Balkan Paktı',
+                'Eisenhower Doktrini',
+                'Cominform'
+            ],
+            answer: 1,
+            explanation: '<strong>Doğru Cevap: B</strong><br>Marshall Planı (1947), II. Dünya Savaşı sonrası yıkılan Avrupa ekonomilerini doğrultmak ve komünizm nüfuzunu engellemek için ABD Dışişleri Bakanı Marshall tarafından hazırlanan ekonomik yardım paketidir.',
+            distractors: '<strong>Çeldirici Analizi:</strong> Truman Doktrini askeri/siyasi yardım paketidir (özellikle Türkiye ve Yunanistan\'a yapılmıştır). Cominform ise SSCB liderliğindeki komünist blok teşkilatıdır.'
         }
     ];
 
+    // YAZILIM MOTORU DEĞİŞKENLERİ
     let fqFiltered = [], fqIndex = 0, fqCurrentUnit = 'all', fqScore = 0, fqStreak = 0, fqTotal = 0, fqCorrect = 0;
 
-    function fqInit() { fqUpdateFilter(); }
-    function fqUpdateFilter() { fqFiltered = fqDatabase.filter(q => (fqCurrentUnit === 'all') || (q.unit === fqCurrentUnit)); fqIndex = 0; fqRender(); }
-    function fqSelectUnit(unitKey) { fqCurrentUnit = unitKey; document.querySelectorAll('.fq-tab-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); fqUpdateFilter(); }
+    function fqInit() { 
+        fqUpdateFilter(); 
+    }
+
+    function fqUpdateFilter() { 
+        fqFiltered = fqDatabase.filter(q => (fqCurrentUnit === 'all') || (q.unit === fqCurrentUnit)); 
+        fqIndex = 0; 
+        fqRender(); 
+    }
+
+    function fqSelectUnit(unitKey) { 
+        fqCurrentUnit = unitKey; 
+        document.querySelectorAll('.fq-tab-btn').forEach(b => b.classList.remove('active')); 
+        if (event && event.target) {
+            event.target.classList.add('active');
+        }
+        fqUpdateFilter(); 
+    }
+
     function fqRender() {
         document.getElementById('fq-explanation').style.display = 'none';
-        if (fqFiltered.length === 0) { document.getElementById('fq-text').innerText = 'Soru bulunamadı.'; document.getElementById('fq-options').innerHTML = ''; return; }
+        if (fqFiltered.length === 0) { 
+            document.getElementById('fq-text').innerText = 'Bu ünitede henüz soru bulunmamaktadır.'; 
+            document.getElementById('fq-options').innerHTML = ''; 
+            document.getElementById('fq-count').innerText = '0 / 0';
+            return; 
+        }
         const q = fqFiltered[fqIndex];
         document.getElementById('fq-tag').innerText = q.tag;
         document.getElementById('fq-count').innerText = `Soru ${fqIndex + 1} / ${fqFiltered.length}`;
         document.getElementById('fq-text').innerHTML = q.question.replace(/\n/g, '<br>');
         document.getElementById('fq-progress').style.width = `${((fqIndex + 1) / fqFiltered.length) * 100}%`;
+        
         const letters = ['A', 'B', 'C', 'D', 'E'], optsDiv = document.getElementById('fq-options');
         optsDiv.innerHTML = '';
+        
         q.options.forEach((opt, idx) => {
             const d = document.createElement('div');
             d.className = 'fq-opt';
@@ -154,22 +343,46 @@
             optsDiv.appendChild(d);
         });
     }
+
     function fqSelectOpt(idx) {
         const q = fqFiltered[fqIndex], opts = document.getElementById('fq-options').children;
         for (let o of opts) o.classList.add('disabled');
         fqTotal++;
-        if (idx === q.answer) { opts[idx].classList.add('correct'); fqScore += 10; fqStreak++; fqCorrect++; }
-        else { opts[idx].classList.add('incorrect'); opts[q.answer].classList.add('correct'); fqStreak = 0; }
+        
+        if (idx === q.answer) { 
+            opts[idx].classList.add('correct'); 
+            fqScore += 10; 
+            fqStreak++; 
+            fqCorrect++; 
+        } else { 
+            opts[idx].classList.add('incorrect'); 
+            opts[q.answer].classList.add('correct'); 
+            fqStreak = 0; 
+        }
+        
         document.getElementById('fq-score').innerText = fqScore;
         document.getElementById('fq-streak').innerText = `${fqStreak} 🔥`;
         document.getElementById('fq-accuracy').innerText = `%${Math.round((fqCorrect / fqTotal) * 100)}`;
         document.getElementById('fq-exp-content').innerHTML = `${q.explanation}<br><br>${q.distractors}`;
         document.getElementById('fq-explanation').style.display = 'block';
     }
-    function fqNextQuestion() { if (fqIndex < fqFiltered.length - 1) { fqIndex++; fqRender(); } }
-    function fqPrevQuestion() { if (fqIndex > 0) { fqIndex--; fqRender(); } }
+
+    function fqNextQuestion() { 
+        if (fqIndex < fqFiltered.length - 1) { 
+            fqIndex++; 
+            fqRender(); 
+        } 
+    }
+
+    function fqPrevQuestion() { 
+        if (fqIndex > 0) { 
+            fqIndex--; 
+            fqRender(); 
+        } 
+    }
     
     window.onload = fqInit;
     </script>
 </body>
 </html>
+
