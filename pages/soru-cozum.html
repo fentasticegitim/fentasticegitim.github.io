@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soru Çözümü | Fentastic Eğitim</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Plus Jakarta Sans', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-body antialiased min-h-screen pb-12">
+
+    <!-- ÜST BAR & İLERLEME -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
+            <!-- Geri Dön -->
+            <a href="../index.html" class="p-2 text-slate-500 hover:text-slate-800 flex items-center gap-1 font-semibold text-xs">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                Ana Sayfa
+            </a>
+
+            <!-- Ders Başlığı ve Rozeti -->
+            <div id="lesson-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 flex items-center gap-1.5">
+                <span id="lesson-icon">🇹🇷</span>
+                <span id="lesson-title">Türkçe Testi</span>
+            </div>
+
+            <!-- Kronometre -->
+            <div class="text-xs font-mono font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">
+                ⏱️ <span id="timer">00:00</span>
+            </div>
+        </div>
+
+        <!-- İlerleme Çubuğu (Progress Bar) -->
+        <div class="w-full bg-slate-100 h-1.5">
+            <div id="progress-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 20%"></div>
+        </div>
+    </header>
+
+    <!-- ANA SORU EKRANI -->
+    <main class="max-w-md mx-auto px-4 pt-5 space-y-4">
+
+        <!-- Soru Sayacı ve Skor -->
+        <div class="flex items-center justify-between text-xs font-semibold text-slate-400">
+            <span>Soru <strong id="current-q-num" class="text-slate-700 text-sm">1</strong> / <span id="total-q-num">5</span></span>
+            <span class="text-emerald-600">Doğru: <span id="correct-count">0</span> | Yanlış: <span id="wrong-count">0</span></span>
+        </div>
+
+        <!-- SORU KARTI -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+            
+            <!-- Soru Metni -->
+            <div class="space-y-2">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">KPSS Çıkmış Ayarı</span>
+                <h2 id="question-text" class="font-heading font-bold text-slate-800 text-sm leading-relaxed">
+                    Soru yükleniyor...
+                </h2>
+            </div>
+
+            <!-- ŞIKLAR (A, B, C, D, E) -->
+            <div id="options-container" class="space-y-2.5 pt-2">
+                <!-- Şıklar JavaScript ile buraya eklenecektir -->
+            </div>
+
+            <!-- ÇÖZÜM AÇIKLAMASI (Seçim Yapılınca Açılır) -->
+            <div id="solution-box" class="hidden p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-1.5">
+                <div class="font-bold flex items-center gap-1 text-amber-800">
+                    💡 Çözüm ve Açıklama:
+                </div>
+                <p id="solution-text" class="leading-relaxed">
+                    Açıklama yükleniyor...
+                </p>
+            </div>
+
+        </div>
+
+        <!-- NAVİGASYON BUTONLARI -->
+        <div class="flex items-center justify-between pt-2">
+            <button id="prev-btn" onclick="prevQuestion()" class="px-4 py-2.5 rounded-xl border border-slate-200 font-bold text-xs text-slate-500 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
+                ← Önceki Soru
+            </button>
+            <button id="next-btn" onclick="nextQuestion()" class="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition-all active:scale-95">
+                Sonraki Soru →
+            </button>
+        </div>
+
+    </main>
+
+    <!-- TEST BİTTİ MODALI (SONUÇ EKRANI) -->
+    <div id="result-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mx-auto font-bold">
+                🏆
+            </div>
+            <div>
+                <h3 class="font-heading font-black text-xl text-slate-800">Test Tamamlandı!</h3>
+                <p class="text-xs text-slate-400 mt-1" id="modal-lesson-name">Türkçe Soru Bankası</p>
+            </div>
+
+            <!-- İstatistik Kutusu -->
+            <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                <div class="p-2">
+                    <span class="text-[11px] font-medium text-slate-400 block">Doğru Cevap</span>
+                    <span id="final-correct" class="font-bold text-lg text-emerald-600">0</span>
+                </div>
+                <div class="p-2">
+                    <span class="text-[11px] font-medium text-slate-400 block">Yanlış Cevap</span>
+                    <span id="final-wrong" class="font-bold text-lg text-red-500">0</span>
+                </div>
+            </div>
+
+            <!-- Butonlar -->
+            <div class="space-y-2 pt-2">
+                <button onclick="restartTest()" class="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-lg hover:bg-emerald-700 transition-colors">
+                    🔄 Testi Tekrar Çöz
+                </button>
+                <a href="../index.html" class="block w-full py-3 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-colors">
+                    🏠 Ana Sayfaya Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MANTIKSAL JAVASCRIPT KODLARI -->
+    <script>
+        // 1. KPSS Ders Veritabanı (Sorular ve Açıklamaları)
+        const db = {
+            turkce: {
+                title: "Türkçe Testi",
+                icon: "🇹🇷",
+                color: "emerald",
+                questions: [
+                    {
+                        text: "Aşağıdaki cümlelerin hangisinde terim anlamlı bir sözcük kullanılmıştır?",
+                        options: [
+                            "A) Şairin son şiiri okuyucuda büyük izler bıraktı.",
+                            "B) Tiyatro oyununun ikinci perdesi biraz daha hareketliydi.",
+                            "C) Yolun sonundaki küçük evde ışıklar sönmüştü.",
+                            "D) Derin düşünceler içerisinde saatlerce oturdu.",
+                            "E) Ağacın gölgesinde serinlemek bize çok iyi geldi."
+                        ],
+                        correct: 1, // B şıkkı (0'dan başlar)
+                        solution: "Tiyatro alanına ait özel bir kavram olan 'perde' sözcüğü terim anlamıyla kullanılmıştır."
+                    }
+                ]
+            },
+            matematik: {
+                title: "Matematik Testi",
+                icon: "📐",
+                color: "sky",
+                questions: [
+                    {
+                        text: "Ardışık 3 tek sayının toplamı 81 olduğuna göre, bu sayıların en büyüğü kaçtır?",
+                        options: [
+                            "A) 25",
+                            "B) 27",
+                            "C) 29",
+                            "D) 31",
+                            "E) 33"
+                        ],
+                        correct: 2, // C şıkkı (29)
+                        solution: "Ortanca sayı = 81 / 3 = 27'dir. Sayılar tek olduğu için: 25, 27, 29 şeklinde sıralanır. En büyük sayı 29'dur."
+                    }
+                ]
+            },
+            tarih: {
+                title: "Tarih Testi",
+                icon: "📜",
+                color: "amber",
+                questions: [
+                    {
+                        text: "Mustafa Kemal Atatürk'ün 'Geldikleri gibi giderler!' sözünü söylediği tarihi olay aşağıdakilerden hangisidir?",
+                        options: [
+                            "A) Amasya Genelgesi'nin yayımlanması",
+                            "B) İstanbul'un İtilaf Devletlerince işgali (13 Kasım 1918)",
+                            "C) Sakarya Meydan Muharebesi'nin kazanılması",
+                            "D) Çanakkale Zaferi'nin kazanılması",
+                            "E) Sivas Kongresi'nin toplanması"
+                        ],
+                        correct: 1, // B şıkkı
+                        solution: "Mustafa Kemal Paşa, 13 Kasım 1918'de Haydarpaşa Limanı'na indiğinde İtilaf Donanmasını gördüğünde yaveri Cevat Abbas'a 'Geldikleri gibi giderler!' demiştir."
+                    }
+                ]
+            },
+            cografya: {
+                title: "Coğrafya Testi",
+                icon: "🗺️",
+                color: "teal",
+                questions: [
+                    {
+                        text: "Türkiye'de kıyı ile iç kesimler arasındaki ulaşımda geçitlerin en fazla kullanıldığı bölgeler aşağıdakilerin hangisinde verilmiştir?",
+                        options: [
+                            "A) Karadeniz - Akdeniz",
+                            "B) Ege - Marmara",
+                            "C) İç Anadolu - Doğu Anadolu",
+                            "D) Güneydoğu Anadolu - Akdeniz",
+                            "E) Ege - İç Anadolu"
+                        ],
+                        correct: 0, // A şıkkı
+                        solution: "Karadeniz ve Akdeniz Bölgelerinde dağlar kıyıya paralel uzandığı için kıyı ile iç kesim ulaşımı geçitlerle (Zigana, Kop, Çubuk, Sertavul vb.) sağlanır."
+                    }
+                ]
+            },
+            vatandaslik: {
+                title: "Vatandaşlık Testi",
+                icon: "⚖️",
+                color: "purple",
+                questions: [
+                    {
+                        text: "1982 Anayasası'na göre Türkiye Büyük Millet Meclisi (TBMM) genel seçimleri kaç yılda bir yapılır?",
+                        options: [
+                            "A) 3 yıl",
+                            "B) 4 yıl",
+                            "C) 5 yıl",
+                            "D) 6 yıl",
+                            "E) 7 yıl"
+                        ],
+                        correct: 2, // C şıkkı (5 yıl)
+                        solution: "2017 Anayasa değişikliği ile TBMM ve Cumhurbaşkanlığı seçimleri 5 yılda bir aynı gün yapılır."
+                    }
+                ]
+            }
+        };
+
+        // 2. URL Parametresinden Dersi Çekme
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedLessonKey = urlParams.get('ders') || 'turkce';
+        const lessonData = db[selectedLessonKey] || db.turkce;
+
+        // Değişkenler
+        let currentQIndex = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let answeredQuestions = {};
+
+        // Sayfa Yüklendiğinde
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('lesson-title').innerText = lessonData.title;
+            document.getElementById('lesson-icon').innerText = lessonData.icon;
+            document.getElementById('total-q-num').innerText = lessonData.questions.length;
+            loadQuestion();
+            startTimer();
+        });
+
+        // Soru Yükleme Fonksiyonu
+        function loadQuestion() {
+            const q = lessonData.questions[currentQIndex];
+            document.getElementById('current-q-num').innerText = currentQIndex + 1;
+            document.getElementById('question-text').innerText = q.text;
+            
+            // İlerleme çubuğu
+            const progressPct = ((currentQIndex + 1) / lessonData.questions.length) * 100;
+            document.getElementById('progress-bar').style.width = progressPct + '%';
+
+            // Şıkları Temizle ve Ekle
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const isAnswered = answeredQuestions.hasOwnProperty(currentQIndex);
+            const userChoice = answeredQuestions[currentQIndex];
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl border text-xs font-semibold transition-all flex items-center justify-between ";
+
+                if (!isAnswered) {
+                    btn.className += "border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700";
+                    btn.onclick = () => selectOption(idx);
+                } else {
+                    if (idx === q.correct) {
+                        btn.className += "border-emerald-500 bg-emerald-50 text-emerald-800 font-bold";
+                    } else if (idx === userChoice) {
+                        btn.className += "border-red-500 bg-red-50 text-red-800 font-bold";
+                    } else {
+                        btn.className += "border-slate-100 bg-white text-slate-400 opacity-60";
+                    }
+                }
+
+                btn.innerText = optText;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Çözüm Kutusunu Göster/Gizle
+            const solutionBox = document.getElementById('solution-box');
+            if (isAnswered) {
+                document.getElementById('solution-text').innerText = q.solution;
+                solutionBox.classList.remove('hidden');
+            } else {
+                solutionBox.classList.add('hidden');
+            }
+
+            // Butonların Durumu
+            document.getElementById('prev-btn').disabled = (currentQIndex === 0);
+            
+            const nextBtn = document.getElementById('next-btn');
+            if (currentQIndex === lessonData.questions.length - 1) {
+                nextBtn.innerText = "Testi Bitir 🏁";
+                nextBtn.onclick = finishTest;
+            } else {
+                nextBtn.innerText = "Sonraki Soru →";
+                nextBtn.onclick = nextQuestion;
+            }
+        }
+
+        // Şık Seçilince
+        function selectOption(optIdx) {
+            if (answeredQuestions.hasOwnProperty(currentQIndex)) return;
+
+            const q = lessonData.questions[currentQIndex];
+            answeredQuestions[currentQIndex] = optIdx;
+
+            if (optIdx === q.correct) {
+                correctCount++;
+            } else {
+                wrongCount++;
+            }
+
+            document.getElementById('correct-count').innerText = correctCount;
+            document.getElementById('wrong-count').innerText = wrongCount;
+
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQIndex < lessonData.questions.length - 1) {
+                currentQIndex++;
+                loadQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQIndex > 0) {
+                currentQIndex--;
+                loadQuestion();
+            }
+        }
+
+        function finishTest() {
+            document.getElementById('final-correct').innerText = correctCount;
+            document.getElementById('final-wrong').innerText = wrongCount;
+            document.getElementById('modal-lesson-name').innerText = lessonData.title;
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        function restartTest() {
+            currentQIndex = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            answeredQuestions = {};
+            document.getElementById('correct-count').innerText = 0;
+            document.getElementById('wrong-count').innerText = 0;
+            document.getElementById('result-modal').classList.add('hidden');
+            loadQuestion();
+        }
+
+        // Zaman Sayacı
+        function startTimer() {
+            let seconds = 0;
+            setInterval(() => {
+                seconds++;
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
