@@ -3,125 +3,508 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fentastic Eğitim - Soru Çözümü</title>
-  <link rel="stylesheet" href="../style.css">
+  <title>Fentastic Eğitim - KPSS İnteraktif Soru Çözümü</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
-    .test-konteynir { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .secenek-btn { display: block; width: 100%; margin: 8px 0; padding: 12px; font-size: 16px; text-align: left; background: #eef2f5; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; }
-    .secenek-btn:hover { background: #dcdfe3; }
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --success-bg: #d1fae5;
+      --success-border: #10b981;
+      --success-text: #065f46;
+      --error-bg: #fee2e2;
+      --error-border: #ef4444;
+      --error-text: #991b1b;
+      --border-color: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .quiz-card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 480px;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border: 1px solid var(--border-color);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      background-color: #eff6ff;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .score-counter {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: #e2e8f0;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    .question-text {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-main);
+      background-color: #f8fafc;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background-color: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-btn.correct {
+      background-color: var(--success-bg) !important;
+      border-color: var(--success-border) !important;
+      color: var(--success-text) !important;
+      font-weight: 700;
+    }
+
+    .option-btn.wrong {
+      background-color: var(--error-bg) !important;
+      border-color: var(--error-border) !important;
+      color: var(--error-text) !important;
+    }
+
+    .explanation-box {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .explanation-box.correct {
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+    }
+
+    .explanation-box.wrong {
+      background-color: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: var(--error-text);
+    }
+
+    .next-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      transition: background-color 0.2s ease;
+    }
+
+    .next-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .result-screen {
+      text-align: center;
+      display: none;
+    }
+
+    .result-screen h2 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .result-screen p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 16px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
-  <div class="test-konteynir">
-    <h2 id="ders-basligi">Soru Çözümü</h2>
-    <div id="soru-kutusu">
-      <p id="soru-metni">Soru yükleniyor...</p>
-      <div id="secenekler-alani"></div>
+  <div class="quiz-card">
+    <!-- Test Ekranı -->
+    <div id="quiz-screen">
+      <div class="header">
+        <span class="badge" id="ders-adi">KPSS TESTİ</span>
+        <span class="score-counter" id="soru-sayaci">1 / 5</span>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div id="soru-icerik">
+        <p class="question-text" id="soru-metni">Soru yükleniyor...</p>
+        <div class="options-grid" id="secenekler-alani"></div>
+        <div class="explanation-box" id="aciklama-kutusu"></div>
+        <button class="next-btn" id="sonraki-btn" onclick="sonrakiSoru()">Sonraki Soruya Geç</button>
+      </div>
+    </div>
+
+    <!-- Sonuç Ekranı -->
+    <div class="result-screen" id="result-screen">
+      <h2>🎉 Test Tamamlandı!</h2>
+      <p id="sonuc-detay">5 sorudan 0 tanesini doğru cevapladınız.</p>
+      <button class="next-btn" style="display:block;" onclick="testiYenidenBaslat()">Testi Tekrar Çöz</button>
     </div>
   </div>
 
   <script>
-    // URL'den ders parametresini alır (?ders=fen veya ?ders=tarih gibi)
     const urlParams = new URLSearchParams(window.location.search);
     const secilenDers = urlParams.get('ders') || 'tarih';
 
-    // TÜM DERSLERİN SORU HAVUZU
-    const tumSorular = [
-      // --- TARİH SORULARI ---
+    // HER DERS İÇİN 5'ER KPSS SORUSU
+    const kpssSoruBankasi = [
+      // --- TARİH ---
       {
         ders: "tarih",
-        soru: "Anadolu Selçuklu Devleti'nin kurucusu kimdir?",
+        soru: "1. II. Kök Türk (Kutluk) Devleti döneminde dikilen Türk tarihinin ilk yazılı belgeleri hangisidir?",
+        secenekler: ["Yenisey Kitabeleri", "Orhun Abideleri", "Karabalgasun Yazıtı", "Taryat Kitabesi"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: Orhun Abideleri. Bilge Kağan, Kül Tigin ve Vezir Tonyukuk adına dikilmiştir."
+      },
+      {
+        ders: "tarih",
+        soru: "2. Anadolu Selçuklu Devleti'nin kurucusu kimdir?",
         secenekler: ["I. Kılıç Arslan", "Kutalmışoğlu Süleyman Şah", "Alparslan", "Tuğrul Bey"],
-        dogru: 1
+        dogru: 1,
+        aciklama: "Doğru Cevap: Kutalmışoğlu Süleyman Şah. 1075 yılında İznik merkezli devleti kurmuştur."
       },
       {
         ders: "tarih",
-        soru: "Osmanlı Devleti'nde ilk kâğıt para hangi dönemde basılmıştır?",
-        secenekler: ["I. Süleyman", "Abdülmecid", "II. Mahmud", "Fatih Sultan Mehmet"],
-        dogru: 1
+        soru: "3. Osmanlı Devleti'nde altın para (Sikke-i Hasene) ilk kez hangi padişah döneminde basılmıştır?",
+        secenekler: ["I. Osman", "Orhan Bey", "Fatih Sultan Mehmet", "Kanuni Sultan Süleyman"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: Fatih Sultan Mehmet. Ekonomi ve ticaretin gelişmesiyle basılmıştır."
       },
       {
         ders: "tarih",
-        soru: "Mustafa Kemal Atatürk hangi şehirde doğmuştur?",
-        secenekler: ["İstanbul", "Ankara", "Selanik", "Manastır"],
-        dogru: 2
-      },
-
-      // --- FEN BİLGİSİ SORULARI ---
-      {
-        ders: "fen",
-        soru: "Hücrenin enerji santrali olarak bilinen organel hangisidir?",
-        secenekler: ["Ribozom", "Lizozom", "Mitokondri", "Golgi Cisimciği"],
-        dogru: 2
+        soru: "4. Mustafa Kemal 'Hattı müdafaa yoktur, sathı müdafaa vardır.' emrini hangi savaşta vermiştir?",
+        secenekler: ["I. İnönü Savaşı", "II. İnönü Savaşı", "Sakarya Meydan Muharebesi", "Büyük Taarruz"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: Sakarya Meydan Muharebesi. Topyakün savunma ilkesi uygulanmıştır."
       },
       {
-        ders: "fen",
-        soru: "Bitkilerde fotosentez olayının gerçekleştiği organel hangisidir?",
-        secenekler: ["Kloroplast", "Sentrozom", "Koful", "Çekirdek"],
-        dogru: 0
+        ders: "tarih",
+        soru: "5. Birleşmiş Milletler Teşkilatı hangi konferans sonucunda resmi olarak kurulmuştur?",
+        secenekler: ["Yalta Konferansı", "San Francisco Konferansı", "Potsdam Konferansı", "Paris Konferansı"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: San Francisco Konferansı (1945). Kurucu antlaşma burada imzalanmıştır."
       },
 
-      // --- TÜRKÇE SORULARI ---
+      // --- COĞRAFYA ---
+      {
+        ders: "cografya",
+        soru: "1. Türkiye'nin en doğusu ile en batısı arasındaki yerel saat farkı kaç dakikadır?",
+        secenekler: ["40 Dakika", "60 Dakika", "76 Dakika", "84 Dakika"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: 76 Dakika. 26°-45° Doğu meridyenleri arası 19 meridyen x 4 dk = 76 dakikadır."
+      },
+      {
+        ders: "cografya",
+        soru: "2. Türkiye'nin en yüksek dağı aşağıdakilerden hangisidir?",
+        secenekler: ["Süphan Dağı", "Ağrı Dağı (5137 m)", "Erciyes Dağı", "Kaçkar Dağı"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: Ağrı Dağı. 5.137 metre yüksekliğiyle Türkiye'nin en yüksek noktasıdır."
+      },
+      {
+        ders: "cografya",
+        soru: "3. Türkiye'de her mevsim yağışlı geçen tek iklim tipi hangisidir?",
+        secenekler: ["Akdeniz İklimi", "Karadeniz İklimi", "Karasal İklim", "Marmara İklimi"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: Karadeniz İklimi. Yağış rejimi düzenli tek iklimimizdir."
+      },
+      {
+        ders: "cografya",
+        soru: "4. Türkiye'de nüfus yoğunluğunun en az olduğu coğrafi bölge hangisidir?",
+        secenekler: ["Doğu Anadolu", "İç Anadolu", "Güneydoğu Anadolu", "Karadeniz"],
+        dogru: 0,
+        aciklama: "Doğru Cevap: Doğu Anadolu. Yüzölçümü geniş, iklim sert ve engebeli olduğu için nüfus yoğundur azdır."
+      },
+      {
+        ders: "cografya",
+        soru: "5. Türkiye rezerv bakımından dünyada 1. sırada olduğu bor madenini en çok nerede çıkarır?",
+        secenekler: ["Ege Bölgesi", "Marmara Bölgesi", "İç Anadolu Bölgesi", "Karadeniz Bölgesi"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: Marmara Bölgesi (Balıkesir, Bursa, Kütahya, Eskişehir çevresi)."
+      },
+
+      // --- VATANDAŞLIK ---
+      {
+        ders: "vatandaslik",
+        soru: "1. 1982 Anayasası'na göre Türkiye Büyük Millet Meclisi (TBMM) seçimleri kaç yılda bir yapılır?",
+        secenekler: ["3 Yıl", "4 Yıl", "5 Yıl", "6 Yıl"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: 5 Yıl. CB ve TBMM seçimleri 5 yılda bir aynı gün yapılır."
+      },
+      {
+        ders: "vatandaslik",
+        soru: "2. Anayasa Mahkemesi kaç üyeden oluşmaktadır?",
+        secenekler: ["11 Üye", "13 Üye", "15 Üye", "17 Üye"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: 15 Üye. 12 üyeyi Cumhurbaşkanı, 3 üyeyi TBMM seçer."
+      },
+      {
+        ders: "vatandaslik",
+        soru: "3. İllerde devletin ve cumhurbaşkanının idari temsilcisi kimdir?",
+        secenekler: ["Kaymakam", "Belediye Başkanı", "Vali", "Emniyet Müdürü"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: Vali. İllerde en yüksek mülki idare amiridir."
+      },
+      {
+        ders: "vatandaslik",
+        soru: "4. Milletvekili seçilme yaşı günümüzde kaçtır?",
+        secenekler: ["18 Yaş", "21 Yaş", "25 Yaş", "30 Yaş"],
+        dogru: 0,
+        aciklama: "Doğru Cevap: 18 Yaş. 2017 değişikliği ile 18 yaşını dolduran her Türk vatandaşı seçilebilir."
+      },
+      {
+        ders: "vatandaslik",
+        soru: "5. Hak sahibinin hakkını bizzat kullanması yetkisine ne ad verilir?",
+        secenekler: ["Hak Ehliyeti", "Fiil Ehliyeti", "Hukuk Ehliyeti", "Kullanma Ehliyeti"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: Fiil Ehliyeti. Kendi fiilleriyle hak edinebilme ve borç altına girebilme yetkisidir."
+      },
+
+      // --- TÜRKÇE ---
       {
         ders: "turkce",
-        soru: "Aşağıdaki cümlelerin hangisinde deyim kullanılmıştır?",
-        secenekler: ["Bugün hava çok güzel.", "Göz boyamak için her şeyi yaptı.", "Okula yürüyerek gitti.", "Kitap okumayı severim."],
-        dogru: 1
+        soru: "1. Aşağıdaki kelimelerden hangisinin yazımı doğrudur?",
+        secenekler: ["Yalnız", "Yanlış", "Herkez", "Rastgele"],
+        dogru: 0,
+        aciklama: "Doğru Cevap: Yalnız ('Yalın'dan gelir). Diğerleri: Yanlış, Herkes, Rastgele şeklinde yazılmalıdır."
+      },
+      {
+        ders: "turkce",
+        soru: "2. 'Göz boyamak' deyiminin anlamı aşağıdakilerden hangisidir?",
+        secenekler: ["Birini kandırmak için gösteriş yapmak", "Çok dikkatli incelemek", "Göz sağlığına özen göstermek", "Çok sevinmek"],
+        dogru: 0,
+        aciklama: "Doğru Cevap: Birini kandırmak için gösteriş yapmak."
+      },
+      {
+        ders: "turkce",
+        soru: "3. Cümle sonunda aşağıdaki noktalama işaretlerinden hangisi yer almaz?",
+        secenekler: ["Nokta", "Soru İşareti", "Ünlem", "Virgül"],
+        dogru: 3,
+        aciklama: "Doğru Cevap: Virgül. Virgül sadece cümle içinde öğeleri ayırır, cümle sonunda kullanılmaz."
+      },
+      {
+        ders: "turkce",
+        soru: "4. Eş anlamlı (anlamdaş) sözcük çifti hangisidir?",
+        secenekler: ["Siyah - Beyaz", "Okul - Mektep", "Uzun - Kısa", "İyi - Kötü"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: Okul - Mektep. Aynı kavramı ifade ederler."
+      },
+      {
+        ders: "turkce",
+        soru: "5. Hangisinde ünsüz yumuşamasına örnek bir kelime vardır?",
+        secenekler: ["Sokakta", "Kitabı", "Sınıfta", "Parkta"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: Kitabı (Kitap -> Kitabı p/b yumuşaması)."
+      },
+
+      // --- MATEMATİK ---
+      {
+        ders: "matematik",
+        soru: "1. En küçük ve tek çift asal sayı kaçtır?",
+        secenekler: ["0", "1", "2", "3"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: 2. 2'den küçük veya çift olan başka asal sayı yoktur."
+      },
+      {
+        ders: "matematik",
+        soru: "2. 2x + 8 = 20 denkleminde x değeri kaçtır?",
+        secenekler: ["4", "6", "8", "10"],
+        dogru: 1,
+        aciklama: "Doğru Cevap: 6. (2x = 12 ise x = 6)."
+      },
+      {
+        ders: "matematik",
+        soru: "3. 300 sayısının %20'si kaçtır?",
+        secenekler: ["40", "50", "60", "70"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: 60. (300 x 20 / 100 = 60)."
+      },
+      {
+        ders: "matematik",
+        soru: "4. Bir kenarı 8 cm olan karenin çevresi kaç cm'dir?",
+        secenekler: ["16", "24", "32", "64"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: 32. Kare çevresi = 4 x Kenar = 4 x 8 = 32 cm."
+      },
+      {
+        ders: "matematik",
+        soru: "5. 2⁵ (2 üzeri 5) üslü ifadesinin değeri kaçtır?",
+        secenekler: ["10", "16", "32", "64"],
+        dogru: 2,
+        aciklama: "Doğru Cevap: 32. (2 x 2 x 2 x 2 x 2 = 32)."
       }
     ];
 
-    // Sadece tıklanan derse ait soruları getirir
-    const aktifSorular = tumSorular.filter(s => s.ders === secilenDers);
-    let mevcutSoruIndex = 0;
+    const aktifSorular = kpssSoruBankasi.filter(s => s.ders === secilenDers);
+    let mevcutIndex = 0;
+    let dogruSayisi = 0;
 
-    function soruyuGoster() {
-      const soruMetni = document.getElementById("soru-metni");
-      const seceneklerKutusu = document.getElementById("secenekler-alani");
-      const dersBasligi = document.getElementById("ders-basligi");
-
-      if (dersBasligi) {
-        dersBasligi.innerText = secilenDers.toUpperCase() + " TESTİ";
-      }
-
+    function testYukle() {
+      document.getElementById("ders-adi").innerText = secilenDers.toUpperCase() + " TESTİ";
+      
       if (aktifSorular.length === 0) {
-        soruMetni.innerText = "Bu derse ait henüz soru bulunmuyor.";
-        seceneklerKutusu.innerHTML = "";
+        document.getElementById("soru-metni").innerText = "Bu derse ait henüz soru bulunamadı.";
         return;
       }
 
-      const mevcutSoru = aktifSorular[mevcutSoruIndex];
-      soruMetni.innerText = `${mevcutSoruIndex + 1}. ${mevcutSoru.soru}`;
-      seceneklerKutusu.innerHTML = "";
+      soruyuGoster();
+    }
 
-      mevcutSoru.secenekler.forEach((secenek, index) => {
-        const buton = document.createElement("button");
-        buton.className = "secenek-btn";
-        buton.innerText = secenek;
-        buton.onclick = () => cevapKontrol(index);
-        seceneklerKutusu.appendChild(buton);
+    function soruyuGoster() {
+      const soru = aktifSorular[mevcutIndex];
+      document.getElementById("soru-sayaci").innerText = `${mevcutIndex + 1} / ${aktifSorular.length}`;
+      document.getElementById("progress-bar").style.width = `${((mevcutIndex + 1) / aktifSorular.length) * 100}%`;
+      
+      document.getElementById("soru-metni").innerText = soru.soru;
+      
+      const seceneklerKutusu = document.getElementById("secenekler-alani");
+      seceneklerKutusu.innerHTML = "";
+      
+      const aciklamaKutusu = document.getElementById("aciklama-kutusu");
+      aciklamaKutusu.style.display = "none";
+      
+      document.getElementById("sonraki-btn").style.display = "none";
+
+      soru.secenekler.forEach((secenek, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = secenek;
+        btn.onclick = () => cevapKontrol(idx, btn);
+        seceneklerKutusu.appendChild(btn);
       });
     }
 
-    function cevapKontrol(secilenIndex) {
-      const mevcutSoru = aktifSorular[mevcutSoruIndex];
-      if (secilenIndex === mevcutSoru.dogru) {
-        alert("Doğru Cevap!");
+    function cevapKontrol(secilenIdx, secilenBtn) {
+      const soru = aktifSorular[mevcutIndex];
+      const tumButonlar = document.querySelectorAll(".option-btn");
+      const aciklamaKutusu = document.getElementById("aciklama-kutusu");
+
+      tumButonlar.forEach(btn => btn.disabled = true);
+
+      if (secilenIdx === soru.dogru) {
+        secilenBtn.classList.add("correct");
+        aciklamaKutusu.className = "explanation-box correct";
+        aciklamaKutusu.innerText = "Tebrikler, doğru cevap!";
+        dogruSayisi++;
       } else {
-        alert("Yanlış Cevap!");
+        secilenBtn.classList.add("wrong");
+        tumButonlar[soru.dogru].classList.add("correct");
+        aciklamaKutusu.className = "explanation-box wrong";
+        aciklamaKutusu.innerText = soru.aciklama;
       }
 
-      if (mevcutSoruIndex < aktifSorular.length - 1) {
-        mevcutSoruIndex++;
+      aciklamaKutusu.style.display = "block";
+      document.getElementById("sonraki-btn").style.display = "block";
+    }
+
+    function sonrakiSoru() {
+      if (mevcutIndex < aktifSorular.length - 1) {
+        mevcutIndex++;
         soruyuGoster();
       } else {
-        alert("Testi tamamladınız!");
+        document.getElementById("quiz-screen").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("sonuc-detay").innerText = `${aktifSorular.length} sorudan ${dogruSayisi} tanesini doğru cevapladınız.`;
       }
     }
 
-    window.onload = soruyuGoster;
-  </script>
+    function testiYenidenBaslat() {
+      mevcutIndex = 0;
+      dogruSayisi = 0;
+      document.getElementById("quiz-screen").style.display = "block";
+      document.getElementById("result-screen").style.display = "none";
+      soruyuGoster();
+    }
 
+    window.onload = testYukle;
+  </script>
 </body>
 </html>
