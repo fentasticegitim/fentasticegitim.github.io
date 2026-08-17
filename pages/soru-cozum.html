@@ -1,429 +1,127 @@
 <!DOCTYPE html>
-<html lang="tr" class="scroll-smooth">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Soru Çözümü | Fentastic Eğitim</title>
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        heading: ['Plus Jakarta Sans', 'sans-serif'],
-                        body: ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fentastic Eğitim - Soru Çözümü</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
+    .test-konteynir { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .secenek-btn { display: block; width: 100%; margin: 8px 0; padding: 12px; font-size: 16px; text-align: left; background: #eef2f5; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; }
+    .secenek-btn:hover { background: #dcdfe3; }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-body antialiased min-h-screen pb-12">
+<body>
 
-    <!-- ÜST BAR & İLERLEME -->
-    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-        <div class="max-w-md mx-auto px-4 h-16 flex items-center justify-between gap-2">
-            <!-- Geri Dön -->
-            <a href="../index.html" class="p-1.5 text-slate-500 hover:text-slate-800 flex items-center gap-1 font-semibold text-xs shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                Anasayfa
-            </a>
-
-            <!-- Ders Seçimi Dropdown -->
-            <div class="flex-1 max-w-[190px]">
-                <select id="lesson-select" onchange="changeLesson(this.value)" class="w-full bg-slate-100 text-xs font-bold text-slate-700 py-1.5 px-2 rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 truncate">
-                    <!-- JavaScript ile dinamik doldurulur -->
-                </select>
-            </div>
-
-            <!-- Kronometre -->
-            <div class="text-xs font-mono font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded-lg shrink-0">
-                ⏱️ <span id="timer">00:00</span>
-            </div>
-        </div>
-
-        <!-- İlerleme Çubuğu (Progress Bar) -->
-        <div class="w-full bg-slate-100 h-1.5">
-            <div id="progress-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
-        </div>
-    </header>
-
-    <!-- ANA SORU EKRANI -->
-    <main class="max-w-md mx-auto px-4 pt-5 space-y-4">
-
-        <!-- Soru Sayacı ve Skor -->
-        <div class="flex items-center justify-between text-xs font-semibold text-slate-400">
-            <span>Soru <strong id="current-q-num" class="text-slate-700 text-sm">1</strong> / <span id="total-q-num">0</span></span>
-            <span class="text-emerald-600">Doğru: <span id="correct-count">0</span> | Yanlış: <span id="wrong-count" class="text-red-500">0</span></span>
-        </div>
-
-        <!-- SORU KARTI -->
-        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-            
-            <!-- Soru Metni -->
-            <div class="space-y-2">
-                <div class="flex items-center justify-between">
-                    <span id="badge-category" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">KPSS Çıkmış Ayarı</span>
-                </div>
-                <h2 id="question-text" class="font-heading font-bold text-slate-800 text-sm leading-relaxed">
-                    Soru yükleniyor...
-                </h2>
-            </div>
-
-            <!-- ŞIKLAR (A, B, C, D, E) -->
-            <div id="options-container" class="space-y-2.5 pt-2">
-                <!-- Şıklar JavaScript ile buraya eklenecektir -->
-            </div>
-
-            <!-- ÇÖZÜM AÇIKLAMASI (Seçim Yapılınca Açılır) -->
-            <div id="solution-box" class="hidden p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-1.5">
-                <div class="font-bold flex items-center gap-1 text-amber-800">
-                    💡 Çözüm ve Açıklama:
-                </div>
-                <p id="solution-text" class="leading-relaxed">
-                    Açıklama yükleniyor...
-                </p>
-            </div>
-
-        </div>
-
-        <!-- NAVİGASYON BUTONLARI -->
-        <div class="flex items-center justify-between pt-2">
-            <button id="prev-btn" onclick="prevQuestion()" class="px-4 py-2.5 rounded-xl border border-slate-200 font-bold text-xs text-slate-500 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                ← Önceki Soru
-            </button>
-            <button id="next-btn" onclick="nextQuestion()" class="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition-all active:scale-95">
-                Sonraki Soru →
-            </button>
-        </div>
-
-    </main>
-
-    <!-- TEST BİTTİ MODALI (SONUÇ EKRANI) -->
-    <div id="result-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center space-y-4 shadow-2xl">
-            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mx-auto font-bold">
-                🏆
-            </div>
-            <div>
-                <h3 class="font-heading font-black text-xl text-slate-800">Test Tamamlandı!</h3>
-                <p class="text-xs text-slate-400 mt-1" id="modal-lesson-name">Türkçe Soru Bankası</p>
-            </div>
-
-            <!-- İstatistik Kutusu -->
-            <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                <div class="p-2">
-                    <span class="text-[11px] font-medium text-slate-400 block">Doğru Cevap</span>
-                    <span id="final-correct" class="font-bold text-lg text-emerald-600">0</span>
-                </div>
-                <div class="p-2">
-                    <span class="text-[11px] font-medium text-slate-400 block">Yanlış Cevap</span>
-                    <span id="final-wrong" class="font-bold text-lg text-red-500">0</span>
-                </div>
-            </div>
-
-            <!-- Butonlar -->
-            <div class="space-y-2 pt-2">
-                <button onclick="restartTest()" class="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-lg hover:bg-emerald-700 transition-colors">
-                    🔄 Testi Tekrar Çöz
-                </button>
-                <a href="../index.html" class="block w-full py-3 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-colors">
-                    🏠 Ana Sayfaya Dön
-                </a>
-            </div>
-        </div>
+  <div class="test-konteynir">
+    <h2 id="ders-basligi">Soru Çözümü</h2>
+    <div id="soru-kutusu">
+      <p id="soru-metni">Soru yükleniyor...</p>
+      <div id="secenekler-alani"></div>
     </div>
+  </div>
 
-    <!-- MANTIKSAL JAVASCRIPT KODLARI -->
-    <script>
-        // Veritabanı
-        const db = {
-            turkce: {
-                title: "Türkçe Testi",
-                icon: "🇹🇷",
-                questions: [
-                    {
-                        text: "Aşağıdaki cümlelerin hangisinde terim anlamlı bir sözcük kullanılmıştır?",
-                        options: [
-                            "A) Şairin son şiiri okuyucuda büyük izler bıraktı.",
-                            "B) Tiyatro oyununun ikinci perdesi biraz daha hareketliydi.",
-                            "C) Yolun sonundaki küçük evde ışıklar sönmüştü.",
-                            "D) Derin düşünceler içerisinde saatlerce oturdu.",
-                            "E) Ağacın gölgesinde serinlemek bize çok iyi geldi."
-                        ],
-                        correct: 1,
-                        solution: "Tiyatro alanına ait özel bir kavram olan 'perde' sözcüğü terim anlamıyla kullanılmıştır."
-                    }
-                ]
-            },
-            matematik: {
-                title: "Matematik Testi",
-                icon: "📐",
-                questions: [
-                    {
-                        text: "Ardışık 3 tek sayının toplamı 81 olduğuna göre, bu sayıların en büyüğü kaçtır?",
-                        options: [
-                            "A) 25",
-                            "B) 27",
-                            "C) 29",
-                            "D) 31",
-                            "E) 33"
-                        ],
-                        correct: 2,
-                        solution: "Ortanca sayı = 81 / 3 = 27'dir. Sayılar tek olduğu için: 25, 27, 29 şeklinde sıralanır. En büyük sayı 29'dur."
-                    }
-                ]
-            },
-            tarih_unite1: {
-                title: "Tarih Ünite 1: İslamiyet Öncesi Türk Tarihi",
-                icon: "📜",
-                questions: [
-                    {
-                        text: "İslamiyet öncesi Türk devletlerinde hükümdara yönetme yetkisinin Tanrı tarafından verildiğine inanılan anlayışa ne ad verilir?",
-                        options: ["A) Töre", "B) Kut", "C) Kurultay", "D) Yargı", "E) Balbal"],
-                        correct: 1,
-                        solution: "Kut, Tanrı tarafından hükümdara verilen yönetme yetkisidir. Kan yoluyla hanedanın tüm erkek üyelerine geçtiği için taht kavgalarına zemin hazırlamıştır."
-                    },
-                    {
-                        text: "Türk tarihinde ilk kez düzenli orduyu kuran, 'Onlu Sistem'i oluşturan Asya Hun hükümdarı kimdir?",
-                        options: ["A) Teoman", "B) Mete Han", "C) Bumin Kağan", "D) Atilla", "E) Ki-Ok"],
-                        correct: 1,
-                        solution: "Mete Han, Onlu Sistemi kurarak Türk ordusunun temelini atmıştır."
-                    }
-                ]
-            },
-            tarih_unite2: {
-                title: "Tarih Ünite 2: İlk Türk-İslam Devletleri",
-                icon: "🕌",
-                questions: [
-                    {
-                        text: "Orta Asya'da kurulan ve İslamiyet'i kabul eden ilk Türk-İslam devleti aşağıdakilerden hangisidir?",
-                        options: ["A) Karahanlılar", "B) Gazneliler", "C) Büyük Selçuklular", "D) Tolunoğulları", "E) İhşidiler"],
-                        correct: 0,
-                        solution: "Karahanlılar (840-1212), Orta Asya'da Satuk Buğra Han döneminde İslamiyet'i kabul eden ilk Türk-İslam devletidir."
-                    }
-                ]
-            },
-            tarih_unite3: {
-                title: "Tarih Ünite 3: Osmanlı Kuruluş ve Yükselme",
-                icon: "⚔️",
-                questions: [
-                    {
-                        text: "(1302) Osmanlı Devleti ile Bizans İmparatorluğu arasında yapılan ilk resmi meydan savaşı hangisidir?",
-                        options: ["A) Koyunhisar (Bafeus) Savaşı", "B) Palekanon Savaşı", "C) Sazlıdere Savaşı", "D) Sırpsındığı Savaşı", "E) Maltepe Savaşı"],
-                        correct: 0,
-                        solution: "1302 Koyunhisar Savaşı, Osman Bey döneminde kazanılan ilk resmi Osmanlı-Bizans savaşıdır."
-                    }
-                ]
-            },
-            tarih_unite4: {
-                title: "Tarih Ünite 4: Değişim ve Arayış Yılları",
-                icon: "📜",
-                questions: [
-                    {
-                        text: "Lale Devri'nin padişahı ve dönemin ünlü sadrazamı aşağıdakilerden hangisidir?",
-                        options: [
-                            "A) III. Ahmed - Nevşehirli Damat İbrahim Paşa",
-                            "B) IV. Murad - Koçi Bey",
-                            "C) I. Mahmud - Humbaracı Ahmed Paşa",
-                            "D) III. Selim - Alemdar Mustafa Paşa",
-                            "E) II. Mustafa - Çorlulu Ali Paşa"
-                        ],
-                        correct: 0,
-                        solution: "Lale Devri padişahı III. Ahmed, dönemin yenilikçi sadrazamı ise Nevşehirli Damat İbrahim Paşa'dır."
-                    }
-                ]
-            }
-        };
+  <script>
+    // URL'den ders parametresini alır (?ders=fen veya ?ders=tarih gibi)
+    const urlParams = new URLSearchParams(window.location.search);
+    const secilenDers = urlParams.get('ders') || 'tarih';
 
-        // Uygulama Durum Değişkenleri
-        let currentLessonKey = "tarih_unite1";
-        let currentQuestionIndex = 0;
-        let userAnswers = {};
-        let correctCount = 0;
-        let wrongCount = 0;
-        let timerSeconds = 0;
-        let timerInterval = null;
+    // TÜM DERSLERİN SORU HAVUZU
+    const tumSorular = [
+      // --- TARİH SORULARI ---
+      {
+        ders: "tarih",
+        soru: "Anadolu Selçuklu Devleti'nin kurucusu kimdir?",
+        secenekler: ["I. Kılıç Arslan", "Kutalmışoğlu Süleyman Şah", "Alparslan", "Tuğrul Bey"],
+        dogru: 1
+      },
+      {
+        ders: "tarih",
+        soru: "Osmanlı Devleti'nde ilk kâğıt para hangi dönemde basılmıştır?",
+        secenekler: ["I. Süleyman", "Abdülmecid", "II. Mahmud", "Fatih Sultan Mehmet"],
+        dogru: 1
+      },
+      {
+        ders: "tarih",
+        soru: "Mustafa Kemal Atatürk hangi şehirde doğmuştur?",
+        secenekler: ["İstanbul", "Ankara", "Selanik", "Manastır"],
+        dogru: 2
+      },
 
-        // Başlangıç Yüklemeleri
-        window.onload = function() {
-            initLessonSelect();
-            loadQuestion();
-            startTimer();
-        };
+      // --- FEN BİLGİSİ SORULARI ---
+      {
+        ders: "fen",
+        soru: "Hücrenin enerji santrali olarak bilinen organel hangisidir?",
+        secenekler: ["Ribozom", "Lizozom", "Mitokondri", "Golgi Cisimciği"],
+        dogru: 2
+      },
+      {
+        ders: "fen",
+        soru: "Bitkilerde fotosentez olayının gerçekleştiği organel hangisidir?",
+        secenekler: ["Kloroplast", "Sentrozom", "Koful", "Çekirdek"],
+        dogru: 0
+      },
 
-        // Ders Seçeneklerini Doldurma
-        function initLessonSelect() {
-            const select = document.getElementById("lesson-select");
-            select.innerHTML = "";
-            for (let key in db) {
-                const opt = document.createElement("option");
-                opt.value = key;
-                opt.textContent = `${db[key].icon} ${db[key].title}`;
-                if(key === currentLessonKey) opt.selected = true;
-                select.appendChild(opt);
-            }
-        }
+      // --- TÜRKÇE SORULARI ---
+      {
+        ders: "turkce",
+        soru: "Aşağıdaki cümlelerin hangisinde deyim kullanılmıştır?",
+        secenekler: ["Bugün hava çok güzel.", "Göz boyamak için her şeyi yaptı.", "Okula yürüyerek gitti.", "Kitap okumayı severim."],
+        dogru: 1
+      }
+    ];
 
-        // Ders Değiştirme Mantığı
-        function changeLesson(key) {
-            currentLessonKey = key;
-            currentQuestionIndex = 0;
-            userAnswers = {};
-            correctCount = 0;
-            wrongCount = 0;
-            resetTimer();
-            loadQuestion();
-        }
+    // Sadece tıklanan derse ait soruları getirir
+    const aktifSorular = tumSorular.filter(s => s.ders === secilenDers);
+    let mevcutSoruIndex = 0;
 
-        // Ekrandaki Soruyu Güncelleme
-        function loadQuestion() {
-            const lesson = db[currentLessonKey];
-            const questions = lesson.questions;
-            const q = questions[currentQuestionIndex];
+    function soruyuGoster() {
+      const soruMetni = document.getElementById("soru-metni");
+      const seceneklerKutusu = document.getElementById("secenekler-alani");
+      const dersBasligi = document.getElementById("ders-basligi");
 
-            // Sayaçlar ve Başlıklar
-            document.getElementById("badge-category").innerText = lesson.title;
-            document.getElementById("current-q-num").innerText = currentQuestionIndex + 1;
-            document.getElementById("total-q-num").innerText = questions.length;
-            document.getElementById("correct-count").innerText = correctCount;
-            document.getElementById("wrong-count").innerText = wrongCount;
+      if (dersBasligi) {
+        dersBasligi.innerText = secilenDers.toUpperCase() + " TESTİ";
+      }
 
-            // İlerleme Çubuğu
-            const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
-            document.getElementById("progress-bar").style.width = `${progressPercent}%`;
+      if (aktifSorular.length === 0) {
+        soruMetni.innerText = "Bu derse ait henüz soru bulunmuyor.";
+        seceneklerKutusu.innerHTML = "";
+        return;
+      }
 
-            // Soru Metni
-            document.getElementById("question-text").innerText = q.text;
+      const mevcutSoru = aktifSorular[mevcutSoruIndex];
+      soruMetni.innerText = `${mevcutSoruIndex + 1}. ${mevcutSoru.soru}`;
+      seceneklerKutusu.innerHTML = "";
 
-            // Şıklar
-            const optionsContainer = document.getElementById("options-container");
-            optionsContainer.innerHTML = "";
+      mevcutSoru.secenekler.forEach((secenek, index) => {
+        const buton = document.createElement("button");
+        buton.className = "secenek-btn";
+        buton.innerText = secenek;
+        buton.onclick = () => cevapKontrol(index);
+        seceneklerKutusu.appendChild(buton);
+      });
+    }
 
-            const isAnswered = userAnswers.hasOwnProperty(currentQuestionIndex);
-            const selectedIdx = userAnswers[currentQuestionIndex];
+    function cevapKontrol(secilenIndex) {
+      const mevcutSoru = aktifSorular[mevcutSoruIndex];
+      if (secilenIndex === mevcutSoru.dogru) {
+        alert("Doğru Cevap!");
+      } else {
+        alert("Yanlış Cevap!");
+      }
 
-            q.options.forEach((optText, index) => {
-                const btn = document.createElement("button");
-                btn.className = "w-full text-left p-3.5 rounded-2xl text-xs font-semibold border transition-all duration-200 flex items-center justify-between ";
+      if (mevcutSoruIndex < aktifSorular.length - 1) {
+        mevcutSoruIndex++;
+        soruyuGoster();
+      } else {
+        alert("Testi tamamladınız!");
+      }
+    }
 
-                if (!isAnswered) {
-                    btn.className += "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 active:scale-[0.99]";
-                    btn.onclick = () => selectOption(index);
-                } else {
-                    btn.disabled = true;
-                    if (index === q.correct) {
-                        btn.className += "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold";
-                    } else if (index === selectedIdx) {
-                        btn.className += "bg-red-50 border-red-500 text-red-800 font-bold";
-                    } else {
-                        btn.className += "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
-                    }
-                }
+    window.onload = soruyuGoster;
+  </script>
 
-                btn.innerText = optText;
-                optionsContainer.appendChild(btn);
-            });
-
-            // Çözüm Kutusu Göster/Gizle
-            const solutionBox = document.getElementById("solution-box");
-            if (isAnswered) {
-                solutionBox.classList.remove("hidden");
-                document.getElementById("solution-text").innerText = q.solution;
-            } else {
-                solutionBox.classList.add("hidden");
-            }
-
-            // Navigasyon Buton Durumları
-            document.getElementById("prev-btn").disabled = (currentQuestionIndex === 0);
-            
-            const nextBtn = document.getElementById("next-btn");
-            if (currentQuestionIndex === questions.length - 1) {
-                nextBtn.innerText = "Testi Bitir 🏁";
-                nextBtn.className = "px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition-all active:scale-95";
-            } else {
-                nextBtn.innerText = "Sonraki Soru →";
-                nextBtn.className = "px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition-all active:scale-95";
-            }
-        }
-
-        // Şık Tıklama Olayı
-        function selectOption(index) {
-            if (userAnswers.hasOwnProperty(currentQuestionIndex)) return;
-
-            const q = db[currentLessonKey].questions[currentQuestionIndex];
-            userAnswers[currentQuestionIndex] = index;
-
-            if (index === q.correct) {
-                correctCount++;
-            } else {
-                wrongCount++;
-            }
-
-            loadQuestion();
-        }
-
-        // İleri - Geri Fonksiyonları
-        function nextQuestion() {
-            const questions = db[currentLessonKey].questions;
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                loadQuestion();
-            } else {
-                showResults();
-            }
-        }
-
-        function prevQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                loadQuestion();
-            }
-        }
-
-        // Sonuç Ekranı Modalı
-        function showResults() {
-            clearInterval(timerInterval);
-            document.getElementById("modal-lesson-name").innerText = db[currentLessonKey].title;
-            document.getElementById("final-correct").innerText = correctCount;
-            document.getElementById("final-wrong").innerText = wrongCount;
-            document.getElementById("result-modal").classList.remove("hidden");
-        }
-
-        function restartTest() {
-            document.getElementById("result-modal").classList.add("hidden");
-            currentQuestionIndex = 0;
-            userAnswers = {};
-            correctCount = 0;
-            wrongCount = 0;
-            resetTimer();
-            loadQuestion();
-        }
-
-        // Kronometre
-        function startTimer() {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timerSeconds++;
-                const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
-                const secs = String(timerSeconds % 60).padStart(2, '0');
-                document.getElementById("timer").innerText = `${mins}:${secs}`;
-            }, 1000);
-        }
-
-        function resetTimer() {
-            timerSeconds = 0;
-            document.getElementById("timer").innerText = "00:00";
-            startTimer();
-        }
-    </script>
 </body>
 </html>
